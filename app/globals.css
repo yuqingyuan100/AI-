@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-deep-space: #0A0E27;
+  --color-deep-space-light: #0F1538;
+  --color-deep-space-lighter: #161D4A;
+  --color-neon-blue: #00D4FF;
+  --color-neon-blue-dim: rgba(0, 212, 255, 0.3);
+  --color-neon-purple: #7B2FFF;
+  --color-neon-purple-dim: rgba(123, 47, 255, 0.3);
+  --color-neon-green: #00FF88;
+  --color-surface: #111640;
+  --color-surface-hover: #1A2155;
+  --color-border-glow: rgba(0, 212, 255, 0.15);
+  --color-text-primary: #E8ECF4;
+  --color-text-secondary: #8B92B0;
+  --color-text-muted: #555C7A;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-deep-space);
+  color: var(--color-text-primary);
+  font-family: "Inter", "Noto Sans SC", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--color-neon-blue-dim);
+  color: var(--color-neon-blue);
+}
+
+@utility glow-blue {
+  box-shadow: 0 0 20px var(--color-neon-blue-dim), 0 0 40px rgba(0, 212, 255, 0.1);
+}
+
+@utility glow-text {
+  text-shadow: 0 0 20px var(--color-neon-blue-dim);
+}
+
+@utility gradient-border {
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
