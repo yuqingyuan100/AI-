@@ -139,7 +139,7 @@ export default function WeightSelector({
                         }
                         className="travel-slider w-full"
                       />
-                      <div className="mt-1 flex justify-between px-0.5 text-[10px] text-slate-600">
+                      <div className="pointer-events-none mt-1 flex justify-between px-0.5 text-[10px] text-slate-600">
                         <span>不重要</span>
                         <span>一般</span>
                         <span>很重要</span>
