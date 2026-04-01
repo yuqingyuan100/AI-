@@ -148,9 +148,28 @@ function scheduleMain(ctx: AudioContext, dest: GainNode) {
   }, loopLen * 1000 - 150);
 }
 
-// ── Public API ──
+// ── Pending track for auto-start ──
+let pendingTrack: Track = null;
+let autoStartBound = false;
 
-export function playTrack(track: Track) {
+function bindAutoStart() {
+  if (autoStartBound || typeof window === "undefined") return;
+  autoStartBound = true;
+
+  const events = ["mousemove", "mousedown", "touchstart", "scroll", "keydown"];
+  const handler = () => {
+    if (pendingTrack) {
+      playTrackImmediate(pendingTrack);
+      pendingTrack = null;
+    }
+    events.forEach((e) => window.removeEventListener(e, handler, { capture: true }));
+  };
+  events.forEach((e) =>
+    window.addEventListener(e, handler, { capture: true, once: false, passive: true })
+  );
+}
+
+function playTrackImmediate(track: Track) {
   if (track === currentTrack) return;
   stopLoop();
   const ctx = getCtx();
@@ -162,6 +181,26 @@ export function playTrack(track: Track) {
     loopInterval = scheduleMain(ctx, dest);
   }
   currentTrack = track;
+}
+
+// ── Public API ──
+
+export function playTrack(track: Track) {
+  // Try to play immediately; if AudioContext is suspended (no user gesture yet),
+  // stash the request and auto-start on the first interaction.
+  try {
+    const ctx = getCtx();
+    if (ctx.state === "suspended") {
+      pendingTrack = track;
+      bindAutoStart();
+      return;
+    }
+  } catch {
+    pendingTrack = track;
+    bindAutoStart();
+    return;
+  }
+  playTrackImmediate(track);
 }
 
 export function playClickSound() {
@@ -193,6 +232,7 @@ export function playClickSound() {
 export function stopAll() {
   stopLoop();
   currentTrack = null;
+  pendingTrack = null;
   if (audioCtx && audioCtx.state !== "closed") {
     audioCtx.close();
     audioCtx = null;

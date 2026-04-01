@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { playTrack, playClickSound, isPlaying } from "./audioManager";
+import { useState, useCallback, useEffect } from "react";
+import { playTrack, playClickSound } from "./audioManager";
 
 interface InvitationPageProps {
   onAccept: () => void;
@@ -11,22 +11,18 @@ const FLOATING_ITEMS = ["✈️", "🗺️", "🏔️", "🌊", "🌸", "🚗", 
 
 export default function InvitationPage({ onAccept }: InvitationPageProps) {
   const [fadeOut, setFadeOut] = useState(false);
-  const [musicOn, setMusicOn] = useState(false);
 
-  const startMusic = useCallback(() => {
-    if (musicOn) return;
+  useEffect(() => {
     playTrack("invitation");
-    setMusicOn(true);
-  }, [musicOn]);
+  }, []);
 
   const handleAccept = useCallback(() => {
-    startMusic();
     playClickSound();
     setFadeOut(true);
     setTimeout(() => {
       onAccept();
     }, 800);
-  }, [startMusic, onAccept]);
+  }, [onAccept]);
 
   return (
     <div
@@ -36,7 +32,6 @@ export default function InvitationPage({ onAccept }: InvitationPageProps) {
       style={{
         background: "linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #0f172a 100%)",
       }}
-      onClick={startMusic}
     >
       {/* Floating decorative elements */}
       {FLOATING_ITEMS.map((item, i) => (
@@ -125,14 +120,7 @@ export default function InvitationPage({ onAccept }: InvitationPageProps) {
           </button>
         </div>
 
-        {!musicOn && (
-          <p
-            className="mt-8 text-xs text-slate-600 animate-pulse"
-            style={{ animation: "invFadeUp 0.6s ease-out 2s both" }}
-          >
-            点击屏幕任意处开启氛围音乐 🎵
-          </p>
-        )}
+        
       </div>
 
       <style jsx>{`
