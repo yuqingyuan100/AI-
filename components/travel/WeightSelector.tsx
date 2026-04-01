@@ -57,7 +57,7 @@ export default function WeightSelector({
           ...prev,
           {
             id,
-            text: `${newLeader.emoji} ${newLeader.name} 超过 ${prevLeader.name}，暂时排名第一！`,
+            text: `📢 小管家播报：${newLeader.emoji} ${newLeader.name} 超过 ${prevLeader.name}，暂时领跑！`,
             color: newLeader.color,
           },
         ]);
@@ -96,17 +96,17 @@ export default function WeightSelector({
       <section className="px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           <h2 className="mb-2 text-center text-2xl font-bold text-white sm:text-3xl">
-            你最看重什么？
+            告诉小管家，你最在乎什么？
           </h2>
           <p className="mb-8 text-center text-slate-400">
-            拖动滑块调整每个维度的权重，系统实时计算最适合你的路线
+            拖动滑块告诉我你的偏好，我来帮你实时匹配最佳路线~
           </p>
 
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Weight sliders */}
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-sm font-medium text-slate-300">维度权重设置</h3>
+                <h3 className="text-sm font-medium text-slate-300">偏好调节面板</h3>
                 <button
                   onClick={onReset}
                   className="text-xs text-slate-500 transition-colors hover:text-slate-300"
@@ -152,7 +152,7 @@ export default function WeightSelector({
 
             {/* Ranking results */}
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-              <h3 className="mb-4 text-sm font-medium text-slate-300">实时排名</h3>
+              <h3 className="mb-4 text-sm font-medium text-amber-300/80">小管家的实时推荐</h3>
               <div className="space-y-3">
                 {rankedRoutes.map(({ route, score }, index) => (
                   <div
@@ -199,8 +199,8 @@ export default function WeightSelector({
                 ))}
               </div>
 
-              <div className="mt-4 rounded-lg bg-white/[0.03] p-3 text-xs text-slate-500">
-                加权得分 = 各维度(评分 × 权重) 之和 ÷ 权重总和。权重越高的维度对结果影响越大。
+              <div className="mt-4 rounded-lg bg-amber-500/5 border border-amber-400/10 p-3 text-xs text-slate-500">
+                💡 <span className="text-amber-300/70">小管家提示</span>：加权得分 = 各维度(评分 × 权重) 之和 ÷ 权重总和。权重拉得越高，那个维度就越能左右结果哦~
               </div>
             </div>
           </div>

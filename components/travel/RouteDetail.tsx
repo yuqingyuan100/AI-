@@ -7,6 +7,19 @@ interface RouteDetailProps {
   isSelected: boolean;
 }
 
+function ButlerSays({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="mb-4 flex items-start gap-2.5">
+      <span className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-xs">
+        🧑‍💼
+      </span>
+      <p className="rounded-xl rounded-tl-sm border border-amber-400/10 bg-amber-500/5 px-3.5 py-2 text-sm leading-relaxed text-amber-200/80">
+        {children}
+      </p>
+    </div>
+  );
+}
+
 export default function RouteDetail({
   route,
   onClose,
@@ -45,13 +58,19 @@ export default function RouteDetail({
           </div>
 
           <div className="p-6">
+            {/* Butler intro */}
+            <ButlerSays>
+              来，让小管家带你详细看看{route.name}这条线路。
+              我把方方面面都整理好了，你慢慢看~
+            </ButlerSays>
+
             {/* Quick info */}
             <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {[
                 { label: "距离", value: route.distance },
                 { label: "车程", value: route.duration },
                 { label: "预算", value: route.cost },
-                { label: "天气", value: route.weather.split("，")[0] },
+                { label: "天气", value: route.weather.split("｜")[0] },
               ].map((item) => (
                 <div
                   key={item.label}
@@ -65,7 +84,10 @@ export default function RouteDetail({
 
             {/* Score breakdown */}
             <div className="mb-8">
-              <h3 className="mb-4 text-lg font-bold text-white">评分详解</h3>
+              <h3 className="mb-2 text-lg font-bold text-white">小管家的打分理由</h3>
+              <ButlerSays>
+                以下是我对{route.name}六个维度的详细评分，每一项都有理有据哦~
+              </ButlerSays>
               <div className="grid gap-3 sm:grid-cols-2">
                 {DIMENSIONS.map((dim) => (
                   <div
@@ -102,7 +124,10 @@ export default function RouteDetail({
 
             {/* Highlights */}
             <div className="mb-8">
-              <h3 className="mb-4 text-lg font-bold text-white">核心亮点</h3>
+              <h3 className="mb-2 text-lg font-bold text-white">小管家的推荐理由</h3>
+              <ButlerSays>
+                这几个亮点是我觉得最打动人的，也是选它的核心理由！
+              </ButlerSays>
               <div className="space-y-2">
                 {route.highlights.map((h, i) => (
                   <div
@@ -123,7 +148,10 @@ export default function RouteDetail({
 
             {/* Social recommendations */}
             <div className="mb-8">
-              <h3 className="mb-4 text-lg font-bold text-white">社交媒体推荐</h3>
+              <h3 className="mb-2 text-lg font-bold text-white">小管家帮你翻了社交媒体</h3>
+              <ButlerSays>
+                小红书和抖音上大家怎么说的？我帮你挑了最有参考价值的几条~
+              </ButlerSays>
               <div className="grid gap-3 sm:grid-cols-2">
                 {route.socialRecs.map((rec, i) => (
                   <div
@@ -148,7 +176,10 @@ export default function RouteDetail({
 
             {/* Itinerary */}
             <div className="mb-8">
-              <h3 className="mb-4 text-lg font-bold text-white">三天行程安排</h3>
+              <h3 className="mb-2 text-lg font-bold text-white">小管家的行程安排</h3>
+              <ButlerSays>
+                三天的行程我已经帮你规划好了，节奏松弛不赶路，走起~
+              </ButlerSays>
               <div className="space-y-6">
                 {route.itinerary.map((day) => (
                   <div key={day.day}>
@@ -206,7 +237,7 @@ export default function RouteDetail({
 
             {/* Tips */}
             <div className="mb-8">
-              <h3 className="mb-3 text-lg font-bold text-white">出行提示</h3>
+              <h3 className="mb-2 text-lg font-bold text-white">小管家的温馨叮嘱</h3>
               <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
                 <ul className="space-y-1.5">
                   {route.tips.map((tip, i) => (
@@ -221,24 +252,27 @@ export default function RouteDetail({
 
             {/* Weather */}
             <div className="mb-8 rounded-xl border border-sky-500/20 bg-sky-500/5 p-4">
-              <div className="mb-1 text-sm font-medium text-sky-300">天气预报</div>
+              <div className="mb-1 text-sm font-medium text-sky-300">小管家天气播报</div>
               <p className="text-sm text-sky-200/70">{route.weather}</p>
             </div>
 
             {/* Action */}
+            <ButlerSays>
+              看完了？觉得怎么样~ 满意就选它，想对比的话也可以返回看看其他路线哦！
+            </ButlerSays>
             <div className="flex justify-center gap-3">
               <button
                 onClick={onClose}
                 className="rounded-xl border border-white/10 px-6 py-3 text-sm font-medium text-slate-300 transition-colors hover:bg-white/10"
               >
-                返回对比
+                再看看其他的
               </button>
               <button
                 onClick={() => onSelect(route.id)}
                 className="rounded-xl px-8 py-3 text-sm font-bold text-white transition-all hover:opacity-90"
                 style={{ backgroundColor: route.color }}
               >
-                {isSelected ? "✓ 已选择此路线" : "就选这条线路！"}
+                {isSelected ? "✓ 已选择此路线" : "就听小管家的，选它！"}
               </button>
             </div>
           </div>

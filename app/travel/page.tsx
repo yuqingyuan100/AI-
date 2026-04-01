@@ -101,10 +101,10 @@ export default function TravelPage() {
       <section id="routes" className="px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
           <h2 className="mb-2 text-center text-2xl font-bold text-white sm:text-3xl">
-            四条候选线路
+            小管家精选的四条路线
           </h2>
           <p className="mb-8 text-center text-slate-400">
-            点击「查看详情」了解完整行程，或直接选择心仪的路线
+            每条我都实地调研过啦~ 点「查看详情」让我带你深入了解，或者直接拍板也行！
           </p>
           <div className="grid gap-6 overflow-visible sm:grid-cols-2 lg:grid-cols-4">
             {rankedRoutes.map(({ route, score }, index) => (
@@ -144,7 +144,10 @@ export default function TravelPage() {
       {/* Footer */}
       <footer className="border-t border-white/5 px-4 py-8 text-center">
         <p className="text-sm text-slate-600">
-          4月4日~6日旅行提案 · 数据来源：小红书 / 抖音 / 各旅游平台
+          小管家 miniYQY · 4月4日~6日旅行提案 · 数据来源：小红书 / 抖音 / 各旅游平台
+        </p>
+        <p className="mt-1 text-xs text-slate-700">
+          祝各位冒险者旅途愉快，有问题随时找小管家~
         </p>
       </footer>
     </>

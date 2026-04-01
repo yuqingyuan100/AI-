@@ -35,10 +35,10 @@ export default function RadarChart({ routes, selectedRouteId }: RadarChartProps)
     <section className="px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
         <h2 className="mb-2 text-center text-2xl font-bold text-white sm:text-3xl">
-          多维度评分对比
+          小管家的数据分析室
         </h2>
         <p className="mb-10 text-center text-slate-400">
-          六大维度全面衡量，找到最适合你的那条线路
+          我从六个维度帮你打了分，一图胜千言，谁强谁弱一目了然~
         </p>
 
         <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-center">
