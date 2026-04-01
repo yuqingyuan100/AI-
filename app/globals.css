@@ -47,3 +47,40 @@ body {
   background-clip: padding-box;
   position: relative;
 }
+
+/* Travel page slider */
+.travel-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: #334155;
+  outline: none;
+  cursor: pointer;
+}
+
+.travel-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  border: 3px solid #334155;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.travel-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+.travel-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  border: 3px solid #334155;
+  cursor: pointer;
+}
