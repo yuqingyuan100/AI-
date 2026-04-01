@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import InvitationPage from "@/components/travel/InvitationPage";
+import { playTrack, stopAll } from "@/components/travel/audioManager";
 import TravelHero from "@/components/travel/TravelHero";
 import RouteCard from "@/components/travel/RouteCard";
 import RadarChart from "@/components/travel/RadarChart";
@@ -49,6 +50,15 @@ export default function TravelPage() {
     setSelectedRouteId(null);
     setWeights(DEFAULT_WEIGHTS);
   }, []);
+
+  useEffect(() => {
+    if (accepted) {
+      playTrack("main");
+    }
+    return () => {
+      if (accepted) stopAll();
+    };
+  }, [accepted]);
 
   const detailRoute = detailRouteId ? ROUTES.find((r) => r.id === detailRouteId) : null;
   const selectedRoute = selectedRouteId ? ROUTES.find((r) => r.id === selectedRouteId) : null;

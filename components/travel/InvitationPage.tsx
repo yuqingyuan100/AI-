@@ -1,132 +1,32 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
+import { playTrack, playClickSound, isPlaying } from "./audioManager";
 
 interface InvitationPageProps {
   onAccept: () => void;
 }
 
-// C-major pentatonic melody loop via Web Audio API
-function startBGM(ctx: AudioContext) {
-  const notes = [523.25, 587.33, 659.25, 783.99, 880, 783.99, 659.25, 587.33];
-  const noteDur = 0.35;
-  const loopLen = notes.length * noteDur;
-  let startTime = ctx.currentTime + 0.1;
-
-  function scheduleLoop() {
-    for (let i = 0; i < notes.length; i++) {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.value = notes[i];
-      gain.gain.setValueAtTime(0, startTime + i * noteDur);
-      gain.gain.linearRampToValueAtTime(0.08, startTime + i * noteDur + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.001, startTime + (i + 1) * noteDur);
-      osc.connect(gain).connect(ctx.destination);
-      osc.start(startTime + i * noteDur);
-      osc.stop(startTime + (i + 1) * noteDur);
-    }
-
-    // sub-bass accompaniment
-    const bass = ctx.createOscillator();
-    const bassGain = ctx.createGain();
-    bass.type = "triangle";
-    bass.frequency.value = 261.63;
-    bassGain.gain.setValueAtTime(0.04, startTime);
-    bassGain.gain.exponentialRampToValueAtTime(0.001, startTime + loopLen);
-    bass.connect(bassGain).connect(ctx.destination);
-    bass.start(startTime);
-    bass.stop(startTime + loopLen);
-
-    startTime += loopLen;
-  }
-
-  scheduleLoop();
-  const interval = setInterval(() => {
-    if (ctx.state === "closed") {
-      clearInterval(interval);
-      return;
-    }
-    scheduleLoop();
-  }, loopLen * 1000 - 200);
-
-  return interval;
-}
-
-function playClickSound(ctx: AudioContext) {
-  const t = ctx.currentTime;
-
-  // bright "ding"
-  const osc1 = ctx.createOscillator();
-  const g1 = ctx.createGain();
-  osc1.type = "sine";
-  osc1.frequency.value = 1318.5; // E6
-  g1.gain.setValueAtTime(0.3, t);
-  g1.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
-  osc1.connect(g1).connect(ctx.destination);
-  osc1.start(t);
-  osc1.stop(t + 0.4);
-
-  // harmonic sparkle
-  const osc2 = ctx.createOscillator();
-  const g2 = ctx.createGain();
-  osc2.type = "sine";
-  osc2.frequency.value = 1975.5; // B6
-  g2.gain.setValueAtTime(0.15, t + 0.05);
-  g2.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
-  osc2.connect(g2).connect(ctx.destination);
-  osc2.start(t + 0.05);
-  osc2.stop(t + 0.35);
-}
-
 const FLOATING_ITEMS = ["✈️", "🗺️", "🏔️", "🌊", "🌸", "🚗", "⛺", "📸", "🌅", "🍜"];
 
 export default function InvitationPage({ onAccept }: InvitationPageProps) {
-  const [visible, setVisible] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
-  const [bgmStarted, setBgmStarted] = useState(false);
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const bgmIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [musicOn, setMusicOn] = useState(false);
 
-  const ensureAudioCtx = useCallback(() => {
-    if (!audioCtxRef.current) {
-      audioCtxRef.current = new AudioContext();
-    }
-    return audioCtxRef.current;
-  }, []);
-
-  const handleInteraction = useCallback(() => {
-    if (bgmStarted) return;
-    const ctx = ensureAudioCtx();
-    bgmIntervalRef.current = startBGM(ctx);
-    setBgmStarted(true);
-  }, [bgmStarted, ensureAudioCtx]);
+  const startMusic = useCallback(() => {
+    if (musicOn) return;
+    playTrack("invitation");
+    setMusicOn(true);
+  }, [musicOn]);
 
   const handleAccept = useCallback(() => {
-    const ctx = ensureAudioCtx();
-    playClickSound(ctx);
-
+    startMusic();
+    playClickSound();
     setFadeOut(true);
     setTimeout(() => {
-      if (bgmIntervalRef.current) clearInterval(bgmIntervalRef.current);
-      if (audioCtxRef.current && audioCtxRef.current.state !== "closed") {
-        audioCtxRef.current.close();
-      }
-      setVisible(false);
       onAccept();
     }, 800);
-  }, [ensureAudioCtx, onAccept]);
-
-  useEffect(() => {
-    return () => {
-      if (bgmIntervalRef.current) clearInterval(bgmIntervalRef.current);
-      if (audioCtxRef.current && audioCtxRef.current.state !== "closed") {
-        audioCtxRef.current.close();
-      }
-    };
-  }, []);
-
-  if (!visible) return null;
+  }, [startMusic, onAccept]);
 
   return (
     <div
@@ -136,7 +36,7 @@ export default function InvitationPage({ onAccept }: InvitationPageProps) {
       style={{
         background: "linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #0f172a 100%)",
       }}
-      onClick={handleInteraction}
+      onClick={startMusic}
     >
       {/* Floating decorative elements */}
       {FLOATING_ITEMS.map((item, i) => (
@@ -146,7 +46,7 @@ export default function InvitationPage({ onAccept }: InvitationPageProps) {
           style={{
             left: `${8 + (i * 17) % 84}%`,
             top: `${12 + ((i * 23 + 7) % 76)}%`,
-            animation: `floatItem ${4 + (i % 3) * 1.5}s ease-in-out infinite alternate`,
+            animation: `invFloat ${4 + (i % 3) * 1.5}s ease-in-out infinite alternate`,
             animationDelay: `${i * 0.4}s`,
           }}
         >
@@ -161,26 +61,24 @@ export default function InvitationPage({ onAccept }: InvitationPageProps) {
 
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-lg px-6 text-center">
-        {/* Envelope icon */}
         <div
           className="mb-6 inline-block text-6xl"
-          style={{ animation: "bounceIn 0.8s ease-out" }}
+          style={{ animation: "invBounce 0.8s ease-out" }}
         >
           💌
         </div>
 
-        {/* Invitation text — staggered fade-in */}
         <div className="mb-4 space-y-3">
           <h1
             className="text-2xl font-bold text-amber-300 sm:text-3xl"
-            style={{ animation: "fadeSlideUp 0.6s ease-out 0.3s both" }}
+            style={{ animation: "invFadeUp 0.6s ease-out 0.3s both" }}
           >
             恭喜你，幸运的冒险者！
           </h1>
 
           <p
             className="text-base text-slate-300 sm:text-lg"
-            style={{ animation: "fadeSlideUp 0.6s ease-out 0.6s both" }}
+            style={{ animation: "invFadeUp 0.6s ease-out 0.6s both" }}
           >
             你已获得一封
             <span className="font-semibold text-emerald-400">清明自驾秘境探险</span>
@@ -189,7 +87,7 @@ export default function InvitationPage({ onAccept }: InvitationPageProps) {
 
           <div
             className="rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm"
-            style={{ animation: "fadeSlideUp 0.6s ease-out 0.9s both" }}
+            style={{ animation: "invFadeUp 0.6s ease-out 0.9s both" }}
           >
             <p className="mb-2 text-sm leading-relaxed text-slate-400 sm:text-base">
               我是你的专属旅行管家
@@ -208,18 +106,16 @@ export default function InvitationPage({ onAccept }: InvitationPageProps) {
 
           <p
             className="text-lg font-medium text-slate-200 sm:text-xl"
-            style={{ animation: "fadeSlideUp 0.6s ease-out 1.2s both" }}
+            style={{ animation: "invFadeUp 0.6s ease-out 1.2s both" }}
           >
             准备好了吗？
           </p>
         </div>
 
-        {/* CTA button */}
-        <div style={{ animation: "fadeSlideUp 0.6s ease-out 1.5s both" }}>
+        <div style={{ animation: "invFadeUp 0.6s ease-out 1.5s both" }}>
           <button
             onClick={(e) => {
               e.stopPropagation();
-              handleInteraction();
               handleAccept();
             }}
             className="group relative mt-4 inline-flex items-center gap-2 rounded-2xl bg-amber-400 px-10 py-4 text-lg font-bold text-slate-900 shadow-lg shadow-amber-500/30 transition-all duration-200 hover:bg-amber-300 hover:shadow-xl hover:shadow-amber-500/40 hover:scale-105 active:scale-95"
@@ -229,28 +125,26 @@ export default function InvitationPage({ onAccept }: InvitationPageProps) {
           </button>
         </div>
 
-        {/* Tap hint */}
-        {!bgmStarted && (
+        {!musicOn && (
           <p
             className="mt-8 text-xs text-slate-600 animate-pulse"
-            style={{ animation: "fadeSlideUp 0.6s ease-out 2s both" }}
+            style={{ animation: "invFadeUp 0.6s ease-out 2s both" }}
           >
             点击屏幕任意处开启氛围音乐 🎵
           </p>
         )}
       </div>
 
-      {/* Keyframe animations */}
       <style jsx>{`
-        @keyframes floatItem {
+        @keyframes invFloat {
           0% { transform: translateY(0) rotate(0deg); }
           100% { transform: translateY(-20px) rotate(10deg); }
         }
-        @keyframes fadeSlideUp {
+        @keyframes invFadeUp {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
         }
-        @keyframes bounceIn {
+        @keyframes invBounce {
           0% { opacity: 0; transform: scale(0.3); }
           50% { opacity: 1; transform: scale(1.1); }
           70% { transform: scale(0.95); }
