@@ -2,7 +2,7 @@ type Track = "invitation" | "main" | null;
 
 let audioCtx: AudioContext | null = null;
 let currentTrack: Track = null;
-let loopInterval: ReturnType<typeof setInterval> | null = null;
+let loopTimeout: ReturnType<typeof setTimeout> | null = null;
 let masterGain: GainNode | null = null;
 
 function getCtx(): AudioContext {
@@ -24,138 +24,176 @@ function getMaster(): GainNode {
 }
 
 function stopLoop() {
-  if (loopInterval) {
-    clearInterval(loopInterval);
-    loopInterval = null;
+  if (loopTimeout) {
+    clearTimeout(loopTimeout);
+    loopTimeout = null;
   }
 }
 
-// ── Invitation BGM: bright, festive C-major pentatonic ──
-function scheduleInvitation(ctx: AudioContext, dest: GainNode) {
-  const melody = [523.25, 659.25, 783.99, 880, 1046.5, 880, 783.99, 659.25];
-  const bass =   [261.63, 329.63, 392, 329.63];
-  const chime =  [1318.5, 1567.98, 1318.5, 1046.5];
-  const noteDur = 0.3;
-  const loopLen = melody.length * noteDur;
-  let t = ctx.currentTime + 0.05;
+// ── Piano note synthesis ──
+function pianoNote(
+  ctx: AudioContext,
+  dest: AudioNode,
+  freq: number,
+  time: number,
+  dur: number,
+  vel: number = 0.07
+) {
+  const partials = [1, 2, 3, 4];
+  const amps = [1, 0.35, 0.12, 0.04];
 
-  function schedule() {
-    for (let i = 0; i < melody.length; i++) {
-      const osc = ctx.createOscillator();
-      const g = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.value = melody[i];
-      g.gain.setValueAtTime(0, t + i * noteDur);
-      g.gain.linearRampToValueAtTime(0.07, t + i * noteDur + 0.04);
-      g.gain.exponentialRampToValueAtTime(0.001, t + (i + 1) * noteDur);
-      osc.connect(g).connect(dest);
-      osc.start(t + i * noteDur);
-      osc.stop(t + (i + 1) * noteDur);
-    }
-
-    for (let i = 0; i < bass.length; i++) {
-      const osc = ctx.createOscillator();
-      const g = ctx.createGain();
-      osc.type = "triangle";
-      osc.frequency.value = bass[i];
-      const bt = t + i * (loopLen / bass.length);
-      g.gain.setValueAtTime(0.04, bt);
-      g.gain.exponentialRampToValueAtTime(0.001, bt + loopLen / bass.length);
-      osc.connect(g).connect(dest);
-      osc.start(bt);
-      osc.stop(bt + loopLen / bass.length);
-    }
-
-    for (let i = 0; i < chime.length; i++) {
-      const osc = ctx.createOscillator();
-      const g = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.value = chime[i];
-      const ct = t + i * (loopLen / chime.length) + 0.15;
-      g.gain.setValueAtTime(0, ct);
-      g.gain.linearRampToValueAtTime(0.025, ct + 0.03);
-      g.gain.exponentialRampToValueAtTime(0.001, ct + 0.25);
-      osc.connect(g).connect(dest);
-      osc.start(ct);
-      osc.stop(ct + 0.25);
-    }
-
-    t += loopLen;
+  for (let p = 0; p < partials.length; p++) {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq * partials[p];
+    const a = vel * amps[p];
+    g.gain.setValueAtTime(0, time);
+    g.gain.linearRampToValueAtTime(a, time + 0.008);
+    g.gain.setValueAtTime(a * 0.9, time + 0.05);
+    g.gain.exponentialRampToValueAtTime(0.0001, time + dur + 0.3);
+    osc.connect(g).connect(dest);
+    osc.start(time);
+    osc.stop(time + dur + 0.35);
   }
-
-  schedule();
-  return setInterval(() => {
-    if (ctx.state === "closed") return;
-    schedule();
-  }, loopLen * 1000 - 150);
 }
 
-// ── Main page BGM: calm, exploratory Am pentatonic ──
-function scheduleMain(ctx: AudioContext, dest: GainNode) {
-  const melody = [440, 523.25, 587.33, 523.25, 440, 392, 349.23, 392];
-  const pad =    [220, 261.63, 293.66, 261.63];
-  const noteDur = 0.5;
-  const loopLen = melody.length * noteDur;
-  let t = ctx.currentTime + 0.05;
-
-  function schedule() {
-    for (let i = 0; i < melody.length; i++) {
-      const osc = ctx.createOscillator();
-      const g = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.value = melody[i];
-      g.gain.setValueAtTime(0, t + i * noteDur);
-      g.gain.linearRampToValueAtTime(0.05, t + i * noteDur + 0.08);
-      g.gain.exponentialRampToValueAtTime(0.001, t + (i + 0.9) * noteDur);
-      osc.connect(g).connect(dest);
-      osc.start(t + i * noteDur);
-      osc.stop(t + (i + 1) * noteDur);
-    }
-
-    for (let i = 0; i < pad.length; i++) {
-      const osc = ctx.createOscillator();
-      const g = ctx.createGain();
-      osc.type = "triangle";
-      osc.frequency.value = pad[i];
-      const pt = t + i * (loopLen / pad.length);
-      g.gain.setValueAtTime(0.03, pt);
-      g.gain.linearRampToValueAtTime(0.035, pt + 0.3);
-      g.gain.exponentialRampToValueAtTime(0.001, pt + loopLen / pad.length);
-      osc.connect(g).connect(dest);
-      osc.start(pt);
-      osc.stop(pt + loopLen / pad.length);
-    }
-
-    // soft high shimmer
-    const shimmer = ctx.createOscillator();
-    const sg = ctx.createGain();
-    shimmer.type = "sine";
-    shimmer.frequency.value = 1046.5;
-    sg.gain.setValueAtTime(0, t);
-    sg.gain.linearRampToValueAtTime(0.015, t + 0.2);
-    sg.gain.exponentialRampToValueAtTime(0.001, t + loopLen * 0.8);
-    shimmer.connect(sg).connect(dest);
-    shimmer.start(t);
-    shimmer.stop(t + loopLen);
-
-    t += loopLen;
+function pianoChord(
+  ctx: AudioContext,
+  dest: AudioNode,
+  freqs: number[],
+  time: number,
+  dur: number,
+  vel: number = 0.035
+) {
+  for (let i = 0; i < freqs.length; i++) {
+    pianoNote(ctx, dest, freqs[i], time + i * 0.02, dur, vel);
   }
-
-  schedule();
-  return setInterval(() => {
-    if (ctx.state === "closed") return;
-    schedule();
-  }, loopLen * 1000 - 150);
 }
 
-// ── Pending track for auto-start ──
+// ── Jay Chou "Sunny Day" (晴天) melody in G major ──
+// G3=196, A3=220, B3=246.94, C4=261.63, D4=293.66, E4=329.63, F#4=369.99
+// G4=392, A4=440, B4=493.88, C5=523.25, D5=587.33, E5=659.25, F#5=739.99, G5=783.99
+
+const G3 = 196, A3 = 220, B3 = 246.94, C4 = 261.63, D4 = 293.66, E4 = 329.63;
+const Fs4 = 369.99, G4 = 392, A4 = 440, B4 = 493.88, C5 = 523.25, D5 = 587.33;
+const E5 = 659.25, Fs5 = 739.99, G5 = 783.99;
+const D3 = 146.83, E3 = 164.81, Fs3 = 185, C3 = 130.81;
+
+// Chords: I(G) - V(D) - vi(Em) - IV(C)
+const chordG = [G3, B3, D4];
+const chordD = [D3, Fs3, A3];
+const chordEm = [E3, G3, B3];
+const chordC = [C3, E3, G4 / 2]; // G3
+
+const BPM = 72;
+const BEAT = 60 / BPM; // ~0.833s
+const E8 = BEAT / 2;   // eighth note
+
+type NoteEvent = [number, number, number]; // [freq, startBeat, durBeats]
+
+// Verse melody: 故事的小黄花 从出生那年就飘着
+const verseMelody: NoteEvent[] = [
+  [B4, 0, 0.5], [B4, 0.5, 0.5], [B4, 1, 0.5], [B4, 1.5, 0.5],
+  [A4, 2, 0.5], [B4, 2.5, 0.5], [D5, 3, 1], [B4, 4, 0.5],
+  [B4, 4.5, 0.5], [B4, 5, 0.5], [B4, 5.5, 0.5], [A4, 6, 0.5],
+  [G4, 6.5, 1.5],
+  // 童年的荡秋千 随记忆一直晃到现在
+  [B4, 8, 0.5], [B4, 8.5, 0.5], [B4, 9, 0.5], [B4, 9.5, 0.5],
+  [C5, 10, 0.5], [B4, 10.5, 0.5], [A4, 11, 1],
+  [G4, 12, 0.5], [G4, 12.5, 0.5], [A4, 13, 0.5], [B4, 13.5, 1.5],
+];
+
+// Pre-chorus: 吹着前奏 望着天空
+const preChorusMelody: NoteEvent[] = [
+  [D5, 0, 0.5], [D5, 0.5, 0.5], [D5, 1, 0.5], [D5, 1.5, 0.5],
+  [E5, 2, 0.5], [D5, 2.5, 0.5], [B4, 3, 1],
+  [D5, 4, 0.5], [D5, 4.5, 0.5], [D5, 5, 0.5], [D5, 5.5, 0.5],
+  [E5, 6, 0.5], [D5, 6.5, 1.5],
+];
+
+// Chorus: 刮风这天 我试过握着你手
+const chorusMelody: NoteEvent[] = [
+  [G5, 0, 0.5], [G5, 0.5, 0.5], [Fs5, 1, 0.5], [E5, 1.5, 0.5],
+  [D5, 2, 1], [E5, 3, 0.5], [E5, 3.5, 0.5],
+  [D5, 4, 0.5], [B4, 4.5, 0.5], [A4, 5, 1],
+  [B4, 6, 0.5], [B4, 6.5, 0.5], [D5, 7, 0.5], [B4, 7.5, 0.5],
+  [A4, 8, 0.5], [G4, 8.5, 1.5],
+  // 但偏偏 雨渐渐 大到我看你不见
+  [G5, 10, 0.5], [G5, 10.5, 0.5], [Fs5, 11, 0.5], [E5, 11.5, 0.5],
+  [D5, 12, 1], [E5, 13, 0.5], [E5, 13.5, 0.5],
+  [D5, 14, 0.5], [B4, 14.5, 0.5], [A4, 15, 1],
+  [G4, 16, 2],
+];
+
+// Chord progression for each section
+type ChordEvent = [number[], number, number]; // [freqs, startBeat, durBeats]
+
+function makeChords(startBeat: number, bars: number): ChordEvent[] {
+  const prog = [chordG, chordD, chordEm, chordC];
+  const result: ChordEvent[] = [];
+  for (let i = 0; i < bars; i++) {
+    result.push([prog[i % 4], startBeat + i * 4, 4]);
+  }
+  return result;
+}
+
+function scheduleSunnyDay(ctx: AudioContext, dest: GainNode, isMain: boolean) {
+  const t0 = ctx.currentTime + 0.1;
+  const melodyVel = isMain ? 0.055 : 0.065;
+  const chordVel = isMain ? 0.025 : 0.03;
+
+  // Section 1: Verse (16 beats = 4 bars)
+  const verseStart = 0;
+  for (const [freq, beat, dur] of verseMelody) {
+    pianoNote(ctx, dest, freq, t0 + (verseStart + beat) * BEAT, dur * BEAT, melodyVel);
+  }
+  for (const [freqs, beat, dur] of makeChords(verseStart, 4)) {
+    pianoChord(ctx, dest, freqs, t0 + beat * BEAT, dur * BEAT, chordVel);
+  }
+
+  // Small pause (1 beat)
+  const preStart = 16;
+  // Section 2: Pre-chorus (8 beats = 2 bars)
+  for (const [freq, beat, dur] of preChorusMelody) {
+    pianoNote(ctx, dest, freq, t0 + (preStart + beat) * BEAT, dur * BEAT, melodyVel);
+  }
+  for (const [freqs, beat, dur] of makeChords(preStart, 2)) {
+    pianoChord(ctx, dest, freqs, t0 + beat * BEAT, dur * BEAT, chordVel);
+  }
+
+  // Section 3: Chorus (18 beats ≈ 4.5 bars)
+  const chorusStart = 24;
+  const octaveShift = isMain ? 1 : 0.5; // main page plays chorus lower
+  for (const [freq, beat, dur] of chorusMelody) {
+    pianoNote(ctx, dest, freq * octaveShift, t0 + (chorusStart + beat) * BEAT, dur * BEAT, melodyVel * 1.1);
+  }
+  for (const [freqs, beat, dur] of makeChords(chorusStart, 5)) {
+    pianoChord(ctx, dest, freqs, t0 + beat * BEAT, dur * BEAT, chordVel);
+  }
+
+  // Outro - gentle arpeggio (4 beats)
+  const outroStart = 44;
+  const outroNotes: NoteEvent[] = [
+    [G4, 0, 1], [B4, 0.5, 1], [D5, 1, 1], [G5, 1.5, 2],
+  ];
+  for (const [freq, beat, dur] of outroNotes) {
+    pianoNote(ctx, dest, freq, t0 + (outroStart + beat) * BEAT, dur * BEAT, melodyVel * 0.7);
+  }
+  pianoChord(ctx, dest, chordG, t0 + outroStart * BEAT, 4 * BEAT, chordVel * 0.8);
+
+  const totalBeats = 48;
+  const totalDuration = totalBeats * BEAT; // ~40 seconds
+  return totalDuration;
+}
+
+// ── Auto-start on first interaction ──
 let pendingTrack: Track = null;
 let autoStartBound = false;
 
 function bindAutoStart() {
   if (autoStartBound || typeof window === "undefined") return;
   autoStartBound = true;
-
   const events = ["mousemove", "mousedown", "touchstart", "scroll", "keydown"];
   const handler = () => {
     if (pendingTrack) {
@@ -174,20 +212,19 @@ function playTrackImmediate(track: Track) {
   stopLoop();
   const ctx = getCtx();
   const dest = getMaster();
-
-  if (track === "invitation") {
-    loopInterval = scheduleInvitation(ctx, dest);
-  } else if (track === "main") {
-    loopInterval = scheduleMain(ctx, dest);
-  }
   currentTrack = track;
+
+  function loop() {
+    if (ctx.state === "closed" || currentTrack !== track) return;
+    const dur = scheduleSunnyDay(ctx, dest, track === "main");
+    loopTimeout = setTimeout(loop, dur * 1000 - 500);
+  }
+  loop();
 }
 
 // ── Public API ──
 
 export function playTrack(track: Track) {
-  // Try to play immediately; if AudioContext is suspended (no user gesture yet),
-  // stash the request and auto-start on the first interaction.
   try {
     const ctx = getCtx();
     if (ctx.state === "suspended") {
@@ -208,25 +245,9 @@ export function playClickSound() {
   const dest = getMaster();
   const t = ctx.currentTime;
 
-  const osc1 = ctx.createOscillator();
-  const g1 = ctx.createGain();
-  osc1.type = "sine";
-  osc1.frequency.value = 1318.5;
-  g1.gain.setValueAtTime(0.25, t);
-  g1.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
-  osc1.connect(g1).connect(dest);
-  osc1.start(t);
-  osc1.stop(t + 0.4);
-
-  const osc2 = ctx.createOscillator();
-  const g2 = ctx.createGain();
-  osc2.type = "sine";
-  osc2.frequency.value = 1975.5;
-  g2.gain.setValueAtTime(0.12, t + 0.05);
-  g2.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
-  osc2.connect(g2).connect(dest);
-  osc2.start(t + 0.05);
-  osc2.stop(t + 0.35);
+  // Bright ding - two harmonics
+  pianoNote(ctx, dest, 1318.5, t, 0.3, 0.15);
+  pianoNote(ctx, dest, 1975.5, t + 0.04, 0.25, 0.08);
 }
 
 export function stopAll() {
