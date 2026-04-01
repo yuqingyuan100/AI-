@@ -77,25 +77,26 @@ export default function InvitationPage({ onAccept }: InvitationPageProps) {
           >
             你已获得一封
             <span className="font-semibold text-emerald-400">清明自驾秘境探险</span>
-            的邀请函。
+            的邀请函！
           </p>
 
           <div
-            className="rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm"
+            className="rounded-xl border border-amber-400/20 bg-amber-500/5 p-5 backdrop-blur-sm"
             style={{ animation: "invFadeUp 0.6s ease-out 0.9s both" }}
           >
-            <p className="mb-2 text-sm leading-relaxed text-slate-400 sm:text-base">
-              我是你的专属旅行管家
-              <span className="mx-1 rounded-md bg-amber-500/20 px-1.5 py-0.5 font-bold text-amber-300">
-                miniYQY
+            <p className="mb-3 text-sm leading-relaxed text-slate-400 sm:text-base">
+              我是你的专属旅行小管家
+              <span className="mx-1 inline-flex items-center gap-1 rounded-md bg-amber-500/20 px-2 py-0.5 font-bold text-amber-300">
+                🧑‍💼 miniYQY
               </span>
-              ，
+            </p>
+            <p className="mb-2 text-sm leading-relaxed text-slate-400 sm:text-base">
+              我已经精心调研了<span className="text-emerald-400 font-medium">四条绝佳自驾路线</span>，
+              接下来跟着我的节奏——
             </p>
             <p className="text-sm leading-relaxed text-slate-400 sm:text-base">
-              接下来请跟随我的指引，设定你的出行偏好，
-              <br />
-              我将为你匹配
-              <span className="font-semibold text-sky-400">最心动的路线</span>。
+              先告诉我你在乎什么，我帮你匹配
+              <span className="font-semibold text-sky-400">最心动的目的地</span>~
             </p>
           </div>
 
@@ -103,7 +104,7 @@ export default function InvitationPage({ onAccept }: InvitationPageProps) {
             className="text-lg font-medium text-slate-200 sm:text-xl"
             style={{ animation: "invFadeUp 0.6s ease-out 1.2s both" }}
           >
-            准备好了吗？
+            各位冒险者，准备好了吗？
           </p>
         </div>
 
