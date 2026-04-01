@@ -1,6 +1,15 @@
 import ModuleCard from "./ModuleCard";
 
-const MODULES = [
+interface ModuleData {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  accent: string;
+  href?: string;
+}
+
+const MODULES: ModuleData[] = [
   {
     id: "mod-planning",
     title: "AI 策划",
@@ -11,6 +20,7 @@ const MODULES = [
       </svg>
     ),
     accent: "rgba(0, 212, 255, 0.3)",
+    href: "/planning",
   },
   {
     id: "mod-art",
@@ -115,6 +125,7 @@ export default function ModuleGrid() {
               title={mod.title}
               description={mod.description}
               accentColor={mod.accent}
+              href={mod.href}
             />
           ))}
         </div>

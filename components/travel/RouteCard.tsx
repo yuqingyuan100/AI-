@@ -33,7 +33,7 @@ export default function RouteCard({
       {/* Rank badge */}
       {rank !== undefined && (
         <div
-          className="absolute -right-2 -top-3 flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white shadow-lg"
+          className="absolute -right-2 -top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white shadow-lg"
           style={{ backgroundColor: route.color }}
         >
           {rank}

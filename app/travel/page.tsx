@@ -106,17 +106,18 @@ export default function TravelPage() {
           <p className="mb-8 text-center text-slate-400">
             点击「查看详情」了解完整行程，或直接选择心仪的路线
           </p>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 overflow-visible sm:grid-cols-2 lg:grid-cols-4">
             {rankedRoutes.map(({ route, score }, index) => (
-              <RouteCard
-                key={route.id}
-                route={route}
-                rank={index + 1}
-                score={score}
-                isSelected={selectedRouteId === route.id}
-                onSelect={handleSelect}
-                onViewDetail={handleViewDetail}
-              />
+              <div key={route.id} className="relative" style={{ zIndex: 10 - index }}>
+                <RouteCard
+                  route={route}
+                  rank={index + 1}
+                  score={score}
+                  isSelected={selectedRouteId === route.id}
+                  onSelect={handleSelect}
+                  onViewDetail={handleViewDetail}
+                />
+              </div>
             ))}
           </div>
         </div>

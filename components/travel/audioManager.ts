@@ -245,9 +245,26 @@ export function playClickSound() {
   const dest = getMaster();
   const t = ctx.currentTime;
 
-  // Bright ding - two harmonics
   pianoNote(ctx, dest, 1318.5, t, 0.3, 0.15);
   pianoNote(ctx, dest, 1975.5, t + 0.04, 0.25, 0.08);
+}
+
+export function playSliderTick() {
+  const ctx = getCtx();
+  const dest = getMaster();
+  const t = ctx.currentTime;
+
+  pianoNote(ctx, dest, G5, t, 0.08, 0.04);
+}
+
+export function playRankChange() {
+  const ctx = getCtx();
+  const dest = getMaster();
+  const t = ctx.currentTime;
+
+  pianoNote(ctx, dest, E5, t, 0.15, 0.06);
+  pianoNote(ctx, dest, G5, t + 0.08, 0.15, 0.06);
+  pianoNote(ctx, dest, G5 * 1.2599, t + 0.16, 0.25, 0.08); // B5
 }
 
 export function stopAll() {
