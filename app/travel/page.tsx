@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import InvitationPage from "@/components/travel/InvitationPage";
 import TravelHero from "@/components/travel/TravelHero";
 import RouteCard from "@/components/travel/RouteCard";
 import RadarChart from "@/components/travel/RadarChart";
@@ -19,6 +20,7 @@ const DEFAULT_WEIGHTS: Record<keyof RouteScores, number> = {
 };
 
 export default function TravelPage() {
+  const [accepted, setAccepted] = useState(false);
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [detailRouteId, setDetailRouteId] = useState<string | null>(null);
   const [weights, setWeights] = useState<Record<keyof RouteScores, number>>(DEFAULT_WEIGHTS);
@@ -54,6 +56,10 @@ export default function TravelPage() {
   const rankedRoutes = [...ROUTES]
     .map((r) => ({ route: r, score: calcWeightedScore(r, weights) }))
     .sort((a, b) => b.score - a.score);
+
+  if (!accepted) {
+    return <InvitationPage onAccept={() => setAccepted(true)} />;
+  }
 
   if (detailRoute) {
     return (
