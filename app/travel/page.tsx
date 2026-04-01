@@ -70,6 +70,17 @@ export default function TravelPage() {
     <>
       <TravelHero />
 
+      {/* Weight selector — prioritized as the first interactive step */}
+      <WeightSelector
+        weights={weights}
+        onWeightChange={handleWeightChange}
+        routes={ROUTES}
+        onReset={handleResetWeights}
+      />
+
+      {/* Divider */}
+      <div className="mx-auto h-px max-w-4xl bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
       {/* Route overview cards */}
       <section id="routes" className="px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
@@ -100,17 +111,6 @@ export default function TravelPage() {
 
       {/* Radar chart comparison */}
       <RadarChart routes={ROUTES} selectedRouteId={selectedRouteId ?? undefined} />
-
-      {/* Divider */}
-      <div className="mx-auto h-px max-w-4xl bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-      {/* Weight selector */}
-      <WeightSelector
-        weights={weights}
-        onWeightChange={handleWeightChange}
-        routes={ROUTES}
-        onReset={handleResetWeights}
-      />
 
       {/* Final choice */}
       {selectedRoute && (
