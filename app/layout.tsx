@@ -1,5 +1,20 @@
 import type { Metadata } from "next";
+import { Inter, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const notoSansSC = Noto_Sans_SC({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-noto-sc",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "AI 游戏开发 — 用 AI 赋能游戏各模块的开发与设计",
@@ -13,14 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="min-h-screen antialiased">{children}</body>
+    <html lang="zh-CN" className={`${inter.variable} ${notoSansSC.variable}`}>
+      <body className="min-h-screen antialiased font-sans">{children}</body>
     </html>
   );
 }
