@@ -227,19 +227,38 @@ function MergedTimeline({ day, color }: { day: DayPlan; color: string }) {
   day.spots.forEach((s) => spotMap.set(s.name, s));
 
   return (
-    <div className="relative ml-4 pl-8 border-l-2" style={{ borderColor: `${color}35` }}>
+    <div className="relative ml-5 pl-9 border-l-[3px]" style={{ borderColor: `${color}25` }}>
       {day.schedule.map((slot, i) => {
         const spot = slot.spotRef ? spotMap.get(slot.spotRef) : null;
         const isSpot = !!spot;
+        const isFirst = i === 0;
+        const isLast = i === day.schedule.length - 1;
         return (
-          <div key={i} className={`relative ${i < day.schedule.length - 1 ? "pb-7" : ""}`}>
-            <span
-              className={`absolute rounded-full border-[3px] border-slate-900 ${
-                isSpot ? "h-4 w-4 -left-[35px] top-[4px]" : "h-3 w-3 -left-[33px] top-[6px]"
-              }`}
-              style={{ backgroundColor: isSpot ? color : `${color}50` }}
-            />
+          <div key={i} className={`relative ${!isLast ? "pb-8" : ""}`}>
+            {/* ── Timeline node ── */}
+            {isSpot ? (
+              /* Spot node: large filled circle + outer glow ring */
+              <div className="absolute -left-[42px] top-[2px] flex items-center justify-center">
+                <span
+                  className="absolute h-8 w-8 rounded-full opacity-20 animate-pulse"
+                  style={{ backgroundColor: color }}
+                />
+                <span
+                  className="relative h-5 w-5 rounded-full border-[3px] border-slate-900 shadow-lg"
+                  style={{ backgroundColor: color, boxShadow: `0 0 12px ${color}60` }}
+                />
+              </div>
+            ) : (
+              /* Regular node: outlined ring */
+              <div className="absolute -left-[38px] top-[5px]">
+                <span
+                  className="block h-3.5 w-3.5 rounded-full border-[2.5px]"
+                  style={{ borderColor: `${color}60`, backgroundColor: `${color}15` }}
+                />
+              </div>
+            )}
 
+            {/* ── Content ── */}
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <span className="font-mono text-sm font-bold" style={{ color }}>
                 {slot.time}
