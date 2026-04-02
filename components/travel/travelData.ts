@@ -18,6 +18,7 @@ export interface TimeSlot {
   desc?: string;
   icon?: string;
   warn?: string;
+  spotRef?: string;
 }
 
 export interface DayPlan {
@@ -189,14 +190,14 @@ export const TRIP: TripData = {
         { time: "10:00", title: "起床", duration: "—", icon: "⏰" },
         { time: "10:00-10:30", title: "宁国市区吃早午餐 (Brunch)", duration: "30min", desc: "吃饱！后面山里午餐可能不好吃", icon: "🥐" },
         { time: "10:30", title: "出发，进入川藏线方向", duration: "—", icon: "🚗" },
-        { time: "11:00-11:30", title: "储家滩 — 停车拍照", duration: "30min", desc: "免费 · 川藏线起点\"十里画廊\"", icon: "📸" },
+        { time: "11:00-11:30", title: "储家滩 — 停车拍照", duration: "30min", desc: "免费 · 川藏线起点\"十里画廊\"", icon: "📸", spotRef: "储家滩" },
         { time: "11:30-12:00", title: "驱车 → 方塘乡", duration: "30min车程", icon: "🚗" },
-        { time: "12:00-12:20", title: "方塘落羽杉 — 拍照打卡", duration: "20min", desc: "免费 · 2000亩水杉林", icon: "🌲" },
+        { time: "12:00-12:20", title: "方塘落羽杉 — 拍照打卡", duration: "20min", desc: "免费 · 2000亩水杉林", icon: "🌲", spotRef: "方塘落羽杉" },
         { time: "12:20-12:45", title: "驱车 → 板桥村", duration: "25min车程", icon: "🚗" },
         { time: "12:45-13:30", title: "板桥村午餐 — 农家乐", duration: "45min", desc: "山区农家乐，能吃饱就行", icon: "🍽️", warn: "⚠️ 山区农家乐味道可能一般" },
-        { time: "13:30-15:00", title: "桃岭72拐 — 核心驾驶体验", duration: "1.5h", desc: "海拔200→800m · 连续发卡弯 · 六道湾观景台必停", icon: "🏔️" },
+        { time: "13:30-15:00", title: "桃岭72拐 — 核心驾驶体验", duration: "1.5h", desc: "海拔200→800m · 连续发卡弯 · 六道湾观景台必停", icon: "🏔️", spotRef: "桃岭72拐" },
         { time: "15:00-16:30", title: "驱车 → 桃花潭", duration: "1.5h车程", desc: "60km 山路", icon: "🚗" },
-        { time: "16:30-18:00", title: "桃花潭游览", duration: "1.5h", desc: "门票 ￥75/人（含渡船）", icon: "🌸" },
+        { time: "16:30-18:00", title: "桃花潭游览", duration: "1.5h", desc: "门票 ￥75/人（含渡船）", icon: "🌸", spotRef: "桃花潭" },
         { time: "18:00-18:30", title: "驱车 → 太平湖", duration: "30min车程", desc: "20km", icon: "🚗" },
         { time: "18:30", title: "入住太平湖畔民宿", duration: "—", icon: "🏨" },
         { time: "19:00-20:00", title: "湖边晚餐", duration: "1h", desc: "太平湖鱼头、农家土菜", icon: "🐟" },
@@ -280,14 +281,14 @@ export const TRIP: TripData = {
         { time: "10:00", title: "起床", duration: "—", icon: "⏰" },
         { time: "10:30", title: "退房出发 → 宏村", duration: "1.5h车程", desc: "70km", icon: "🚗" },
         { time: "12:00-12:45", title: "午餐：宏村入口附近", duration: "45min", desc: "必吃臭鳜鱼、毛豆腐、黄山烧饼", icon: "🍽️" },
-        { time: "12:45-15:15", title: "宏村游览", duration: "2.5h", desc: "门票 ￥104/人 · 需提前实名预约", icon: "🎨" },
-        { time: "15:15-15:45", title: "奇墅湖散步", duration: "30min", desc: "免费 · 宏村西门外步行即到", icon: "🏞️" },
+        { time: "12:45-15:15", title: "宏村游览", duration: "2.5h", desc: "门票 ￥104/人 · 需提前实名预约", icon: "🎨", spotRef: "宏村" },
+        { time: "15:15-15:45", title: "奇墅湖散步", duration: "30min", desc: "免费 · 宏村西门外步行即到", icon: "🏞️", spotRef: "奇墅湖" },
         { time: "15:45-16:45", title: "驱车 → 屯溪", duration: "1h车程", desc: "60km", icon: "🚗" },
         { time: "16:45", title: "到达屯溪，入住酒店", duration: "—", icon: "🏨" },
         { time: "17:00-18:00", title: "酒店休息/洗漱", duration: "1h", desc: "走了半天歇歇脚", icon: "🛀" },
         { time: "18:00-19:30", title: "晚餐：屯溪老街徽菜馆", duration: "1.5h", desc: "徽张臭鳜鱼 · 人均 ￥60", icon: "🐟" },
         { time: "19:30-20:00", title: "灯光秀", duration: "25min", desc: "19:30 准时开启，免费", icon: "✨" },
-        { time: "20:00-21:30", title: "老街夜游逛吃", duration: "1.5h", desc: "买特产、吃小吃、拍夜景", icon: "🏮" },
+        { time: "20:00-21:30", title: "老街夜游逛吃", duration: "1.5h", desc: "买特产、吃小吃、拍夜景", icon: "🏮", spotRef: "屯溪老街" },
         { time: "21:30-22:30", title: "推荐：足浴按摩", duration: "1h", desc: "今天走路约 7-8km，捏个脚！人均 ￥60-100", icon: "💆" },
       ],
       spots: [
@@ -363,10 +364,10 @@ export const TRIP: TripData = {
       schedule: [
         { time: "10:00", title: "起床", duration: "—", icon: "⏰" },
         { time: "10:30", title: "退房出发 → 西溪南", duration: "15min车程", desc: "10km", icon: "🚗" },
-        { time: "10:45-12:00", title: "西溪南游览", duration: "1.25h", desc: "免费！抖音爆火\"绿野仙踪\"", icon: "🌿" },
+        { time: "10:45-12:00", title: "西溪南游览", duration: "1.25h", desc: "免费！抖音爆火\"绿野仙踪\"", icon: "🌿", spotRef: "西溪南" },
         { time: "12:00-12:45", title: "午餐：附近农家菜", duration: "45min", desc: "吃饱再上路！", icon: "🍽️" },
         { time: "13:00", title: "上 G3 京台高速返程", duration: "—", icon: "🛣️" },
-        { time: "~13:10", title: "途经呈坎服务区（可停）", duration: "15-20min", desc: "安徽首个网红服务区，有非遗展+特产", icon: "🛒" },
+        { time: "~13:10", title: "途经呈坎服务区（可停）", duration: "15-20min", desc: "安徽首个网红服务区，有非遗展+特产", icon: "🛒", spotRef: "呈坎服务区" },
         { time: "13:00-17:30", title: "高速返程 → 上海", duration: "4-4.5h", desc: "420km · 详见备选路线", icon: "🚗" },
         { time: "~17:00-17:30", title: "到达上海", duration: "—", desc: "完美收官！", icon: "🏠" },
       ],
