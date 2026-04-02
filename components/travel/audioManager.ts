@@ -243,6 +243,17 @@ export function playRankChange() {
   } catch { /* silent fail */ }
 }
 
+export function playTabTap() {
+  try {
+    const ctx = getCtx();
+    if (ctx.state === "suspended") ctx.resume();
+    const dest = getMaster();
+    const t = ctx.currentTime;
+    pianoNote(ctx, dest, 523.25, t, 0.12, 0.1);
+    pianoNote(ctx, dest, 659.25, t + 0.05, 0.1, 0.06);
+  } catch { /* silent fail */ }
+}
+
 export function stopAll() {
   killCurrentLoop();
   currentTrack = null;

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import InvitationPage from "@/components/travel/InvitationPage";
-import { playTrack, stopAll } from "@/components/travel/audioManager";
+import { playTrack, stopAll, playClickSound, playTabTap } from "@/components/travel/audioManager";
 import TravelHero from "@/components/travel/TravelHero";
 import {
   TRIP,
@@ -39,8 +39,8 @@ function CopyBtn({ text }: { text: string }) {
   }, [text]);
   return (
     <button
-      onClick={copy}
-      className={`flex-shrink-0 rounded-lg px-4 py-2 text-sm font-semibold transition-all active:scale-95 ${
+      onClick={() => { copy(); playTabTap(); }}
+      className={`flex-shrink-0 rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-150 active:scale-[0.93] ${
         ok
           ? "bg-emerald-500/20 text-emerald-400"
           : "bg-white/[0.08] text-slate-300 hover:bg-white/15 hover:text-white"
@@ -100,8 +100,8 @@ function InlineSpot({ spot }: { spot: Spot }) {
             {spot.images.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setImg(i)}
-                className={`h-2.5 rounded-full transition-all ${i === img ? "w-6 bg-white" : "w-2.5 bg-white/40"}`}
+                onClick={() => { setImg(i); playTabTap(); }}
+                className={`h-2.5 rounded-full transition-all ${i === img ? "w-6 bg-white" : "w-2.5 bg-white/40 hover:bg-white/60"}`}
               />
             ))}
           </div>
@@ -155,8 +155,8 @@ function PrepSection() {
   return (
     <div className="mb-8 rounded-2xl border border-amber-500/20 bg-amber-500/5 overflow-hidden">
       <button
-        onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between px-6 py-5 text-left transition-colors hover:bg-amber-500/[0.08]"
+        onClick={() => { setOpen(!open); playTabTap(); }}
+        className="flex w-full items-center justify-between px-6 py-5 text-left transition-all duration-150 hover:bg-amber-500/[0.08] active:scale-[0.99]"
       >
         <div className="flex items-center gap-3">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/20 text-lg">🎒</span>
@@ -501,19 +501,20 @@ export default function TravelPage() {
     <>
       <TravelHero />
 
-      <div className="sticky top-0 z-30 border-b border-white/10 bg-slate-900/90 backdrop-blur-lg">
-        <div className="mx-auto flex max-w-3xl items-center justify-center gap-1.5 px-4 py-2.5">
+      <div className="sticky top-0 z-30 border-b border-white/10 bg-slate-900/95 backdrop-blur-lg">
+        {/* Main tabs */}
+        <div className="mx-auto flex max-w-3xl items-center justify-center gap-2 px-4 py-3">
           {([
             { id: "itinerary" as Tab, label: "🗺️ 行程计划" },
             { id: "report" as Tab, label: "📊 YQY的靠谱分析" },
           ]).map((t) => (
             <button
               key={t.id}
-              onClick={() => setTab(t.id)}
-              className={`rounded-full px-6 py-2.5 text-base font-bold transition-all ${
+              onClick={() => { setTab(t.id); playClickSound(); }}
+              className={`rounded-xl px-6 py-2.5 text-base font-bold transition-all duration-150 active:scale-[0.96] ${
                 tab === t.id
-                  ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
-                  : "text-slate-500 hover:bg-white/[0.06] hover:text-slate-300 border border-transparent"
+                  ? "bg-amber-500/20 text-amber-300 border-2 border-amber-500/40 shadow-lg shadow-amber-500/10"
+                  : "bg-white/[0.06] text-slate-400 border-2 border-white/[0.08] hover:bg-white/10 hover:text-white hover:border-white/15"
               }`}
             >
               {t.label}
@@ -521,22 +522,23 @@ export default function TravelPage() {
           ))}
         </div>
 
+        {/* Day sub-tabs */}
         {tab === "itinerary" && (
           <div className="border-t border-white/[0.06]">
-            <div className="mx-auto flex max-w-3xl items-center justify-center gap-1 overflow-x-auto px-4 py-2">
+            <div className="mx-auto flex max-w-3xl items-center justify-center gap-1.5 overflow-x-auto px-4 py-2.5">
               {TRIP.days.map((day, i) => (
                 <button
                   key={day.day}
-                  onClick={() => setDayIdx(i)}
-                  className={`flex flex-shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all ${
+                  onClick={() => { setDayIdx(i); playTabTap(); }}
+                  className={`flex flex-shrink-0 items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-all duration-150 active:scale-[0.96] ${
                     dayIdx === i
-                      ? "bg-white/10 text-white"
-                      : "text-slate-500 hover:bg-white/[0.05] hover:text-slate-300"
+                      ? "bg-white/12 text-white border border-white/20 shadow-md shadow-white/5"
+                      : "bg-white/[0.04] text-slate-400 border border-white/[0.06] hover:bg-white/[0.08] hover:text-slate-200 hover:border-white/12"
                   }`}
                 >
                   <span
-                    className="flex h-6 w-6 items-center justify-center rounded-md text-xs font-bold text-white"
-                    style={{ backgroundColor: DAY_COLORS[i], opacity: dayIdx === i ? 1 : 0.4 }}
+                    className="flex h-6 w-6 items-center justify-center rounded-lg text-xs font-bold text-white transition-opacity"
+                    style={{ backgroundColor: DAY_COLORS[i], opacity: dayIdx === i ? 1 : 0.5 }}
                   >
                     {day.day === 0 ? "N" : day.day}
                   </span>
