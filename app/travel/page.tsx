@@ -73,74 +73,88 @@ function InlineSpot({ spot }: { spot: Spot }) {
   const [img, setImg] = useState(0);
   const badgeCls = spot.badge ? (BADGE_STYLES[spot.badge] ?? "bg-white/20 text-white border-white/30") : "";
 
+  const hasImages = spot.images.length > 0;
+  const hasPlayTips = spot.playTips.length > 0;
+  const hasPhotoTips = spot.photoTips.length > 0;
+
   return (
     <div className="mt-3 mb-2 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
-      {/* Hero image */}
-      <div className="relative aspect-[16/9] max-h-72 overflow-hidden">
-        <img
-          src={spot.images[img]}
-          alt={spot.name}
-          className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+      {/* Hero image (skip if no images) */}
+      {hasImages && (
+        <div className="relative aspect-[16/9] max-h-72 overflow-hidden">
+          <img
+            src={spot.images[img]}
+            alt={spot.name}
+            className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
-        {spot.badge && (
-          <span className={`absolute top-3.5 left-3.5 rounded-full border px-3.5 py-1.5 text-sm font-bold backdrop-blur-sm ${badgeCls}`}>
-            {spot.badge.includes("必去") && "🔥 "}{spot.badge}
-          </span>
-        )}
+          {spot.badge && (
+            <span className={`absolute top-3.5 left-3.5 rounded-full border px-3.5 py-1.5 text-sm font-bold backdrop-blur-sm ${badgeCls}`}>
+              {spot.badge.includes("必去") && "🔥 "}{spot.badge}
+            </span>
+          )}
 
-        <div className="absolute bottom-3.5 left-4">
-          <h4 className="text-xl font-bold text-white drop-shadow-lg">{spot.name}</h4>
-        </div>
-
-        {spot.images.length > 1 && (
-          <div className="absolute bottom-4 right-4 flex gap-2">
-            {spot.images.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => { setImg(i); playTabTap(); }}
-                className={`h-2.5 rounded-full transition-all ${i === img ? "w-6 bg-white" : "w-2.5 bg-white/40 hover:bg-white/60"}`}
-              />
-            ))}
+          <div className="absolute bottom-3.5 left-4">
+            <h4 className="text-xl font-bold text-white drop-shadow-lg">{spot.name}</h4>
           </div>
-        )}
-      </div>
+
+          {spot.images.length > 1 && (
+            <div className="absolute bottom-4 right-4 flex gap-2">
+              {spot.images.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => { setImg(i); playTabTap(); }}
+                  className={`h-2.5 rounded-full transition-all ${i === img ? "w-6 bg-white" : "w-2.5 bg-white/40 hover:bg-white/60"}`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="space-y-5 p-6">
         <p className="text-base leading-relaxed text-slate-300">{spot.desc}</p>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl bg-emerald-500/5 border border-emerald-500/15 p-4">
-            <h5 className="mb-2.5 text-sm font-bold text-emerald-400">🎮 怎么玩</h5>
-            <ul className="space-y-2">
-              {spot.playTips.map((t, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm leading-relaxed text-slate-300">
-                  <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-emerald-500/60" />{t}
-                </li>
-              ))}
-            </ul>
+        {(hasPlayTips || hasPhotoTips) && (
+          <div className={`grid gap-4 ${hasPlayTips && hasPhotoTips ? "sm:grid-cols-2" : ""}`}>
+            {hasPlayTips && (
+              <div className="rounded-xl bg-emerald-500/5 border border-emerald-500/15 p-4">
+                <h5 className="mb-2.5 text-sm font-bold text-emerald-400">🎮 怎么玩</h5>
+                <ul className="space-y-2">
+                  {spot.playTips.map((t, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm leading-relaxed text-slate-300">
+                      <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-emerald-500/60" />{t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {hasPhotoTips && (
+              <div className="rounded-xl bg-sky-500/5 border border-sky-500/15 p-4">
+                <h5 className="mb-2.5 text-sm font-bold text-sky-400">📸 拍什么</h5>
+                <ul className="space-y-2">
+                  {spot.photoTips.map((t, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm leading-relaxed text-slate-300">
+                      <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-sky-500/60" />{t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
-          <div className="rounded-xl bg-sky-500/5 border border-sky-500/15 p-4">
-            <h5 className="mb-2.5 text-sm font-bold text-sky-400">📸 拍什么</h5>
-            <ul className="space-y-2">
-              {spot.photoTips.map((t, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm leading-relaxed text-slate-300">
-                  <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-sky-500/60" />{t}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        )}
 
-        <div className="flex items-center gap-3 rounded-xl bg-white/[0.05] border border-white/[0.08] px-4 py-3">
-          <div className="min-w-0 flex-1">
-            <div className="text-xs font-medium text-slate-500 mb-0.5">📍 司机导航定位</div>
-            <div className="truncate text-sm font-medium text-slate-300">{spot.navAddress}</div>
+        {spot.navAddress && (
+          <div className="flex items-center gap-3 rounded-xl bg-white/[0.05] border border-white/[0.08] px-4 py-3">
+            <div className="min-w-0 flex-1">
+              <div className="text-xs font-medium text-slate-500 mb-0.5">📍 司机导航定位</div>
+              <div className="truncate text-sm font-medium text-slate-300">{spot.navAddress}</div>
+            </div>
+            <CopyBtn text={spot.navAddress} />
           </div>
-          <CopyBtn text={spot.navAddress} />
-        </div>
+        )}
       </div>
     </div>
   );
@@ -544,19 +558,19 @@ export default function TravelPage() {
         {/* Day sub-tabs */}
         {tab === "itinerary" && (
           <div className="border-t border-white/[0.06]">
-            <div className="mx-auto flex max-w-3xl items-center justify-center gap-1.5 overflow-x-auto px-4 py-2.5">
+            <div className="mx-auto grid max-w-3xl grid-cols-4 gap-1.5 px-3 py-2.5 sm:flex sm:items-center sm:justify-center sm:gap-1.5 sm:px-4">
               {TRIP.days.map((day, i) => (
                 <button
                   key={day.day}
                   onClick={() => { setDayIdx(i); playTabTap(); }}
-                  className={`flex flex-shrink-0 items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-all duration-150 active:scale-[0.96] ${
+                  className={`flex items-center justify-center gap-1.5 rounded-xl px-2 py-2 text-xs font-bold transition-all duration-150 active:scale-[0.96] sm:gap-2 sm:px-4 sm:text-sm ${
                     dayIdx === i
                       ? "bg-white/12 text-white border border-white/20 shadow-md shadow-white/5"
                       : "bg-white/[0.04] text-slate-400 border border-white/[0.06] hover:bg-white/[0.08] hover:text-slate-200 hover:border-white/12"
                   }`}
                 >
                   <span
-                    className="flex h-6 w-6 items-center justify-center rounded-lg text-xs font-bold text-white transition-opacity"
+                    className="flex h-5 w-5 items-center justify-center rounded-md text-[10px] font-bold text-white transition-opacity sm:h-6 sm:w-6 sm:rounded-lg sm:text-xs"
                     style={{ backgroundColor: DAY_COLORS[i], opacity: dayIdx === i ? 1 : 0.5 }}
                   >
                     {day.day === 0 ? "N" : day.day}
