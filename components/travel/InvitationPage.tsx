@@ -89,8 +89,8 @@ export default function InvitationPage({ onAccept }: InvitationPageProps) {
             </p>
             <p className="mb-2 text-sm leading-relaxed text-slate-400 sm:text-base">
               目的地已确定 —— <span className="text-amber-400 font-bold">安徽</span>！
-              泾县 · 查济 · 桃花潭 · 宏村 · 屯溪老街，
-              一条不走回头路的经典环线已为你规划好~
+              宁国 · 皖南川藏线72拐 · 桃花潭 · 太平湖 · 宏村 · 屯溪老街，
+              一条不走回头路的公路大片级环线已为你规划好~
             </p>
             <p className="text-sm leading-relaxed text-slate-400 sm:text-base">
               打开攻略，跟小管家一起出发吧！
