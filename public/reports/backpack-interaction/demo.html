@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>物品交互系统 v2.8 (快速存入版)</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1d;
+            --slot-bg: #2d2d32;
+            --slot-border: #3e3e42;
+            --highlight-ok: rgba(100, 255, 100, 0.4);
+            --highlight-err: rgba(255, 100, 100, 0.4);
+            --highlight-swap: rgba(255, 200, 100, 0.5);
+            --item-border: #000;
+            --text-color: #eee;
+            --cell-size: 50px;
+            --gap: 2px;
+            --safe-color: #f39c12;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            user-select: none;
+            -webkit-user-select: none;
+            margin: 0;
+            padding: 10px;
+            overflow-x: hidden;
+            touch-action: none; 
+            padding-bottom: 50px;
+        }
+
+        .header-panel {
+            background-color: #252529;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            width: 90%;
+            max-width: 800px;
+            border-left: 4px solid #f1c40f;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .header-panel h3 { margin: 0 0 10px 0; color: #fff; font-size: 16px; }
+        .principles { font-size: 13px; color: #ccc; line-height: 1.5; margin: 0; padding-left: 20px; }
+
+        .qa-toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn-qa {
+            background-color: #444;
+            color: white;
+            border: 1px solid #555;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .btn-qa:active { background-color: #666; transform: translateY(1px); }
+
+        .game-layout {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            max-width: 100%;
+        }
+
+        .container-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            max-width: 100%;
+        }
+        .container-label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #ccc;
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+
+        .inventory-grid {
+            position: relative;
+            background-color: var(--slot-bg);
+            border: 1px solid #555;
+            display: grid;
+            gap: 1px;
+            transition: opacity 0.2s;
+            touch-action: none;
+        }
+        
+        .equip-slot { border-color: #666; background-color: #252529; }
+        .secure-slot { border-color: var(--safe-color); box-shadow: 0 0 5px rgba(243, 156, 18, 0.2); }
+
+        .grid-cell {
+            width: var(--cell-size);
+            height: var(--cell-size);
+            border: 1px solid var(--slot-border);
+            box-sizing: border-box;
+        }
+
+        .item {
+            position: absolute;
+            background-color: #4a6fa5;
+            border: 1px solid var(--item-border);
+            box-sizing: border-box;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            color: white;
+            z-index: 10;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            touch-action: none;
+        }
+        
+        .item.dragging {
+            opacity: 0.9;
+            pointer-events: none;
+            z-index: 999;
+            box-shadow: 10px 10px 20px rgba(0,0,0,0.6);
+            transform: scale(1.1);
+        }
+
+        .item[data-type="weapon"] { background: linear-gradient(135deg, #8e44ad, #6c3483); }
+        .item[data-type="armor"] { background: linear-gradient(135deg, #c0392b, #922b21); }
+        .item[data-type="head"] { background: linear-gradient(135deg, #a93226, #7b241c); }
+        .item[data-type="potion"] { background: linear-gradient(135deg, #27ae60, #1e8449); }
+        .item[data-type="misc"] { background: linear-gradient(135deg, #f39c12, #d68910); }
+
+        .ghost-slot {
+            position: absolute;
+            pointer-events: none;
+            z-index: 5;
+            display: none;
+            border-radius: 4px;
+        }
+        .ghost-slot.ok { background-color: var(--highlight-ok); }
+        .ghost-slot.error { background-color: var(--highlight-err); }
+        .ghost-slot.swap { background-color: var(--highlight-swap); }
+
+        .storage-panel {
+            border: 1px solid #444;
+            background-color: #222;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 100vw;
+            overflow-x: auto;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .tab-btn {
+            padding: 8px 16px;
+            background-color: #333;
+            color: #888;
+            border: none;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            font-size: 14px;
+            transition: all 0.2s;
+            white-space: nowrap;
+            position: relative; /* For tooltip or status */
+        }
+        .tab-btn.active {
+            background-color: #444; 
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 2px solid #3498db;
+        }
+        /* 拖拽悬停状态：高亮提示“可存入” */
+        .tab-btn.drag-hover {
+            background-color: #d35400;
+            color: white;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+        .tab-btn.drag-hover::after {
+            content: "松手存入";
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #d35400;
+            font-weight: bold;
+        }
+
+        .scroll-view {
+            max-height: 450px;
+            overflow-y: auto;
+            overflow-x: auto;
+            padding-right: 5px; 
+        }
+        .scroll-view::-webkit-scrollbar { width: 4px; height: 4px; }
+        .scroll-view::-webkit-scrollbar-thumb { background: #555; border-radius: 2px; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        #toast-container {
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000;
+            pointer-events: none;
+        }
+        .toast {
+            background-color: rgba(0,0,0,0.85);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-bottom: 5px;
+            font-size: 13px;
+            text-align: center;
+            border-left: 3px solid #3498db;
+            animation: fadeIn 0.2s;
+        }
+        .toast.error { border-left-color: #e74c3c; }
+        .toast.success { border-left-color: #2ecc71; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-panel">
+        <h3>物品交互原则</h3>
+        <ul class="principles">
+            <li>拖拽应打破同大小才能互换的前提，拖拽的目标就是把物品放在期望放置的位置上</li>
+            <li>能原地交换就不要四处乱飞，防止目标在视觉内丢失</li>
+            <li>能两个容器交换就不要涉及第三个容器</li>
+        </ul>
+    </div>
+
+    <div class="qa-toolbar">
+        <button class="btn-qa" onclick="resetDemo()">重置演示</button>
+        <button class="btn-qa" onclick="fillRandom()">随机填充</button>
+        <button class="btn-qa" onclick="setupSwapScenario()">一换多测试</button>
+    </div>
+
+    <div class="game-layout">
+        <!-- 左列：装备与安全箱 -->
+        <div class="column">
+            <!-- 头部 -->
+            <div class="container-wrapper">
+                <div class="container-label">头部 (Head)</div>
+                <div id="container-head" class="inventory-grid equip-slot"></div>
+            </div>
+            <!-- 胸甲 -->
+            <div class="container-wrapper">
+                <div class="container-label">胸甲 (Armor)</div>
+                <div id="container-armor" class="inventory-grid equip-slot"></div>
+            </div>
+            <!-- 武器 -->
+            <div class="container-wrapper">
+                <div class="container-label">主武器 (Weapon 4x4)</div>
+                <div id="container-weapon" class="inventory-grid equip-slot"></div>
+            </div>
+            <!-- 安全箱 -->
+            <div class="container-wrapper" style="margin-top:10px;">
+                <div class="container-label" style="color:var(--safe-color)">安全箱 (Secure 3x3)</div>
+                <div id="container-secure" class="inventory-grid secure-slot"></div>
+            </div>
+        </div>
+
+        <!-- 右列：存储区 (背包/仓库) -->
+        <div class="column">
+            <div class="storage-panel">
+                <!-- 页签导航 (Drop Target) -->
+                <div class="tabs">
+                    <div id="tab-backpack" class="tab-btn active" data-target="backpack">背包 (8x10)</div>
+                    <div id="tab-stash" class="tab-btn" data-target="stash">仓库 (10x12)</div>
+                </div>
+
+                <!-- 滚动视口 -->
+                <div class="scroll-view" id="scroll-storage">
+                    <!-- 背包内容 -->
+                    <div id="view-backpack" class="tab-content active">
+                        <div id="container-backpack" class="inventory-grid"></div>
+                    </div>
+                    <!-- 仓库内容 -->
+                    <div id="view-stash" class="tab-content">
+                        <div id="container-stash" class="inventory-grid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script>
+        // --- 核心配置 ---
+        const CELL_SIZE = 50;
+        const GAP = 1;
+        const TOUCH_OFFSET_Y = 80;
+        const AUTO_SCROLL_ZONE = 50;
+        const AUTO_SCROLL_SPEED = 6;
+        
+        // --- 数据结构 ---
+        class Item {
+            constructor(id, name, w, h, type, containerId, x, y) {
+                this.id = id;
+                this.name = name;
+                this.w = w;
+                this.h = h;
+                this.type = type; 
+                this.containerId = containerId;
+                this.x = x;
+                this.y = y;
+                this.element = null;
+            }
+        }
+
+        class Container {
+            constructor(id, cols, rows, allowedTypes = null) {
+                this.id = id;
+                this.cols = cols;
+                this.rows = rows;
+                this.allowedTypes = allowedTypes; 
+                this.items = [];
+                this.element = document.getElementById(`container-${id}`);
+                this.initGrid();
+            }
+
+            initGrid() {
+                this.element.style.gridTemplateColumns = `repeat(${this.cols}, ${CELL_SIZE}px)`;
+                this.element.style.gridTemplateRows = `repeat(${this.rows}, ${CELL_SIZE}px)`;
+                this.element.style.width = `${this.cols * (CELL_SIZE + GAP)}px`;
+                this.element.style.height = `${this.rows * (CELL_SIZE + GAP)}px`;
+                
+                this.element.innerHTML = '';
+                for(let i=0; i<this.cols * this.rows; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    this.element.appendChild(cell);
+                }
+            }
+
+            addItem(item) {
+                this.items.push(item);
+                this.renderItem(item);
+            }
+
+            removeItem(itemId) {
+                const idx = this.items.findIndex(i => i.id === itemId);
+                if (idx > -1) {
+                    const item = this.items[idx];
+                    if(item.element) item.element.remove();
+                    this.items.splice(idx, 1);
+                    return item;
+                }
+                return null;
+            }
+
+            checkCollision(x, y, w, h, excludeItems = []) {
+                if (x < 0 || y < 0 || x + w > this.cols || y + h > this.rows) 
+                    return { valid: false, reason: 'out_of_bounds', obstacles: [] };
+
+                let obstacles = [];
+                for (let item of this.items) {
+                    if (excludeItems.includes(item.id)) continue;
+                    if (x < item.x + item.w && x + w > item.x &&
+                        y < item.y + item.h && y + h > item.y) {
+                        obstacles.push(item);
+                    }
+                }
+
+                if (obstacles.length > 0) {
+                    return { valid: false, reason: 'collision', obstacles: obstacles };
+                }
+                return { valid: true, reason: null, obstacles: [] };
+            }
+
+            // 新增：寻找第一个空位 (用于快速存入)
+            findEmptySlot(w, h) {
+                // 从左上角开始遍历
+                for(let y = 0; y <= this.rows - h; y++) {
+                    for(let x = 0; x <= this.cols - w; x++) {
+                        if(this.checkCollision(x, y, w, h).valid) {
+                            return { x, y };
+                        }
+                    }
+                }
+                return null;
+            }
+
+            canAcceptType(type) {
+                if (!this.allowedTypes) return true;
+                return this.allowedTypes.includes(type);
+            }
+
+            renderItem(item) {
+                if (!item.element) {
+                    item.element = document.createElement('div');
+                    item.element.className = 'item';
+                    item.element.dataset.type = item.type;
+                    item.element.textContent = item.name;
+                    item.element.id = item.id;
+                    
+                    item.element.addEventListener('mousedown', (e) => onInputStart(e, item, false));
+                    item.element.addEventListener('touchstart', (e) => onInputStart(e, item, true), {passive: false});
+                    
+                    this.element.appendChild(item.element);
+                }
+                
+                item.element.style.width = `${item.w * CELL_SIZE + (item.w - 1) * GAP}px`;
+                item.element.style.height = `${item.h * CELL_SIZE + (item.h - 1) * GAP}px`;
+                item.element.style.left = `${item.x * (CELL_SIZE + GAP)}px`;
+                item.element.style.top = `${item.y * (CELL_SIZE + GAP)}px`;
+            }
+        }
+
+        // --- 全局状态 ---
+        let containers = {};
+        let activeTab = 'backpack'; 
+        
+        let dragItem = null;
+        let dragGhost = null;
+        let dragOffset = { x: 0, y: 0 };
+        let isTouchMode = false;
+
+        let tabSwitchTimer = null;
+        let autoScrollFrame = null;
+        
+        // --- 初始化 ---
+        function init() {
+            containers['head'] = new Container('head', 2, 2, ['head']);
+            containers['armor'] = new Container('armor', 2, 3, ['armor']);
+            containers['weapon'] = new Container('weapon', 4, 4, ['weapon']);
+            containers['secure'] = new Container('secure', 3, 3, ['potion', 'misc']); 
+
+            containers['backpack'] = new Container('backpack', 8, 10, null);
+            containers['stash'] = new Container('stash', 10, 12, null);
+
+            createGhost();
+            bindTabEvents();
+            resetDemo();
+        }
+
+        function createGhost() {
+            dragGhost = document.createElement('div');
+            dragGhost.className = 'ghost-slot';
+            document.body.appendChild(dragGhost);
+        }
+
+        function bindTabEvents() {
+            document.getElementById('tab-backpack').onclick = () => switchTab('backpack');
+            document.getElementById('tab-stash').onclick = () => switchTab('stash');
+        }
+
+        function switchTab(tabId) {
+            activeTab = tabId;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`view-${tabId}`).classList.add('active');
+            document.getElementById('scroll-storage').scrollTop = 0;
+        }
+
+        // --- QA Buttons ---
+        function resetDemo() {
+            Object.values(containers).forEach(c => {
+                c.items.forEach(i => i.element.remove());
+                c.items = [];
+            });
+
+            const bp = containers['backpack'];
+            bp.addItem(new Item('w1', '巨剑', 2, 4, 'weapon', 'backpack', 0, 0));
+            bp.addItem(new Item('a1', '板甲', 2, 3, 'armor', 'backpack', 2, 0));
+            bp.addItem(new Item('h1', '战盔', 2, 2, 'head', 'backpack', 4, 0));
+            bp.addItem(new Item('p1', '红药', 1, 1, 'potion', 'backpack', 4, 2));
+
+            const wp = containers['weapon'];
+            wp.addItem(new Item('w2', '匕首', 1, 2, 'weapon', 'weapon', 0, 0));
+            
+            showToast("系统已重置", "success");
+        }
+
+        function fillRandom() {
+            const target = containers[activeTab];
+            const templates = [
+                ['大剑', 1, 4, 'weapon'],
+                ['战锤', 2, 3, 'weapon'],
+                ['匕首', 1, 2, 'weapon'],
+                ['重板甲', 2, 3, 'armor'],
+                ['皮甲', 2, 2, 'armor'],
+                ['战盔', 2, 2, 'head'],
+                ['红药', 1, 1, 'potion'],
+                ['蓝药', 1, 1, 'potion'],
+                ['工具箱', 2, 2, 'misc'],
+                ['螺丝', 1, 1, 'misc'],
+                ['胶带', 1, 2, 'misc']
+            ];
+
+            let count = 0;
+            for(let y=0; y<target.rows; y++) {
+                for(let x=0; x<target.cols; x++) {
+                    if (!target.checkCollision(x, y, 1, 1).valid) continue;
+                    if (Math.random() > 0.5) {
+                        const t = templates[Math.floor(Math.random() * templates.length)];
+                        if (target.checkCollision(x, y, t[1], t[2]).valid) {
+                             target.addItem(new Item(
+                                 `rnd-${Date.now()}-${count}`,
+                                 t[0], t[1], t[2], t[3],
+                                 target.id, x, y
+                             ));
+                             count++;
+                        }
+                    }
+                }
+            }
+            showToast(`随机生成了 ${count} 个各式物品`);
+        }
+
+        function setupSwapScenario() {
+            resetDemo();
+            const c = containers['backpack'];
+            c.items.forEach(i => i.element.remove());
+            c.items = [];
+            
+            c.addItem(new Item('tester', '测试甲', 2, 3, 'armor', 'backpack', 4, 0));
+            for(let y=0; y<3; y++) {
+                for(let x=0; x<2; x++) {
+                    c.addItem(new Item(`p-test-${x}-${y}`, '药水', 1, 1, 'potion', 'backpack', x, y));
+                }
+            }
+            showToast("场景加载：尝试把右侧的[测试甲]拖到左上角的药水堆上");
+        }
+
+        // --- 输入处理 ---
+        function onInputStart(e, item, isTouch) {
+            e.preventDefault(); 
+            e.stopPropagation();
+
+            isTouchMode = isTouch;
+            dragItem = item;
+            
+            const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+            const clientY = isTouch ? e.touches[0].clientY : e.clientY;
+            
+            const rect = item.element.getBoundingClientRect();
+            dragOffset.x = clientX - rect.left;
+            dragOffset.y = clientY - rect.top;
+
+            item.element.classList.add('dragging');
+            
+            if (isTouch) {
+                document.addEventListener('touchmove', onInputMove, {passive: false});
+                document.addEventListener('touchend', onInputEnd);
+            } else {
+                document.addEventListener('mousemove', onInputMove);
+                document.addEventListener('mouseup', onInputEnd);
+            }
+        }
+
+        function onInputMove(e) {
+            if (!dragItem) return;
+            e.preventDefault();
+
+            const clientX = isTouchMode ? e.touches[0].clientX : e.clientX;
+            const clientY = isTouchMode ? e.touches[0].clientY : e.clientY;
+            const visualY = isTouchMode ? (clientY - TOUCH_OFFSET_Y) : clientY;
+            
+            dragItem.element.style.position = 'fixed';
+            dragItem.element.style.left = `${clientX - dragOffset.x}px`;
+            dragItem.element.style.top = `${visualY - dragOffset.y}px`;
+
+            checkTabHover(clientX, visualY);
+            checkAutoScroll(visualY);
+            updateGhost(clientX, visualY);
+        }
+
+        function onInputEnd(e) {
+            document.removeEventListener('mousemove', onInputMove);
+            document.removeEventListener('mouseup', onInputEnd);
+            document.removeEventListener('touchmove', onInputMove);
+            document.removeEventListener('touchend', onInputEnd);
+
+            clearTimeout(tabSwitchTimer);
+            tabSwitchTimer = null;
+            cancelAnimationFrame(autoScrollFrame);
+            autoScrollFrame = null;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('drag-hover'));
+
+            dragGhost.style.display = 'none';
+            dragItem.element.classList.remove('dragging');
+            dragItem.element.style.position = 'absolute';
+
+            let clientX, clientY;
+            if (isTouchMode) {
+                clientX = e.changedTouches[0].clientX;
+                clientY = e.changedTouches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            
+            const visualY = isTouchMode ? (clientY - TOUCH_OFFSET_Y) : clientY;
+            
+            // 1. 尝试判定为具体的网格操作
+            const target = getTargetFromPoint(clientX, visualY);
+
+            if (target) {
+                const targetEl = target.container.element;
+                if (targetEl.offsetParent === null) {
+                     revertMove(dragItem, containers[dragItem.containerId]);
+                } else {
+                     executeAtomicMove(dragItem, target.container, target.x, target.y);
+                }
+            } else {
+                // 2. 如果没有落在网格上，检测是否落在了【页签】上 (快速存入)
+                const targetTab = getTabFromPoint(clientX, visualY);
+                if (targetTab) {
+                    // 只有当目标容器不是当前物品所在的容器时，才执行存入
+                    // 比如从背包拖到仓库页签 -> 存入仓库
+                    // 从背包拖到背包页签 -> 无视
+                    if (targetTab !== dragItem.containerId) {
+                        executeAutoDeposit(dragItem, targetTab);
+                    } else {
+                        revertMove(dragItem, containers[dragItem.containerId]);
+                    }
+                } else {
+                    revertMove(dragItem, containers[dragItem.containerId]);
+                    showToast("取消操作");
+                }
+            }
+
+            dragItem = null;
+        }
+
+        // --- Core Helpers ---
+
+        function getTargetFromPoint(x, y) {
+            for (let id in containers) {
+                const c = containers[id];
+                if (c.element.offsetParent === null) continue;
+
+                const rect = c.element.getBoundingClientRect();
+                if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+                    const relX = x - dragOffset.x - rect.left;
+                    const relY = y - dragOffset.y - rect.top;
+                    const snapX = Math.round(relX / (CELL_SIZE + GAP));
+                    const snapY = Math.round(relY / (CELL_SIZE + GAP));
+                    return { container: c, x: snapX, y: snapY };
+                }
+            }
+            return null;
+        }
+
+        // 新增：检测是否落在页签上
+        function getTabFromPoint(x, y) {
+            const tabs = ['backpack', 'stash'];
+            for (let id of tabs) {
+                const el = document.getElementById(`tab-${id}`);
+                const rect = el.getBoundingClientRect();
+                if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+                    return id;
+                }
+            }
+            return null;
+        }
+
+        function updateGhost(x, y) {
+            const target = getTargetFromPoint(x, y);
+            
+            if (target) {
+                const { container, x: gx, y: gy } = target;
+                const rect = container.element.getBoundingClientRect();
+
+                dragGhost.style.display = 'block';
+                dragGhost.style.width = `${dragItem.w * CELL_SIZE + (dragItem.w - 1) * GAP}px`;
+                dragGhost.style.height = `${dragItem.h * CELL_SIZE + (dragItem.h - 1) * GAP}px`;
+                dragGhost.style.left = `${rect.left + gx * (CELL_SIZE + GAP)}px`;
+                dragGhost.style.top = `${rect.top + gy * (CELL_SIZE + GAP)}px`;
+
+                if (gx < 0 || gy < 0 || gx + dragItem.w > container.cols || gy + dragItem.h > container.rows) {
+                    setGhostState('error'); return;
+                }
+                
+                if (!container.canAcceptType(dragItem.type)) {
+                    setGhostState('error'); return;
+                }
+
+                const check = container.checkCollision(gx, gy, dragItem.w, dragItem.h, [dragItem.id]);
+                if (check.valid) {
+                    setGhostState('ok');
+                } else {
+                    setGhostState('swap');
+                }
+            } else {
+                dragGhost.style.display = 'none';
+            }
+        }
+
+        function setGhostState(state) {
+            dragGhost.classList.remove('ok', 'error', 'swap');
+            dragGhost.classList.add(state);
+        }
+
+        // --- Tab Logic ---
+        function checkTabHover(x, y) {
+            checkSingleTab(x, y, 'tab-backpack', 'backpack');
+            checkSingleTab(x, y, 'tab-stash', 'stash');
+        }
+
+        function checkSingleTab(x, y, elementId, targetTab) {
+            const el = document.getElementById(elementId);
+            const rect = el.getBoundingClientRect();
+
+            if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+                // 如果是自己的页签，不高亮（因为不能“存入”给自己）
+                if (targetTab === dragItem.containerId) return;
+
+                el.classList.add('drag-hover');
+                // 自动切换逻辑保留，作为辅助
+                if (!tabSwitchTimer && activeTab !== targetTab) {
+                    tabSwitchTimer = setTimeout(() => {
+                        switchTab(targetTab);
+                        // showToast(`切换至 ${targetTab}`, 'success');
+                    }, 800); // 略微延长切换时间，给“松手存入”留出操作余地
+                }
+            } else {
+                el.classList.remove('drag-hover');
+            }
+        }
+
+        // --- Auto Scroll ---
+        function checkAutoScroll(y) {
+            const scrollView = document.getElementById('scroll-storage');
+            const rect = scrollView.getBoundingClientRect();
+            
+            if(autoScrollFrame) cancelAnimationFrame(autoScrollFrame);
+
+            if (y < rect.top + AUTO_SCROLL_ZONE && y > rect.top - 50) {
+                autoScrollFrame = requestAnimationFrame(() => {
+                    scrollView.scrollTop -= AUTO_SCROLL_SPEED;
+                    checkAutoScroll(y);
+                });
+            } else if (y > rect.bottom - AUTO_SCROLL_ZONE && y < rect.bottom + 50) {
+                autoScrollFrame = requestAnimationFrame(() => {
+                    scrollView.scrollTop += AUTO_SCROLL_SPEED;
+                    checkAutoScroll(y);
+                });
+            }
+        }
+
+        // --- 核心算法：快速存入 (Auto Deposit) ---
+        function executeAutoDeposit(itemA, targetContainerId) {
+            const sourceContainer = containers[itemA.containerId];
+            const targetContainer = containers[targetContainerId];
+
+            // 1. 类型检查
+            if (!targetContainer.canAcceptType(itemA.type)) {
+                showToast("该容器无法存放此类物品", "error");
+                revertMove(itemA, sourceContainer);
+                return;
+            }
+
+            // 2. 寻找空位
+            const slot = targetContainer.findEmptySlot(itemA.w, itemA.h);
+
+            if (slot) {
+                // 找到空位，切换页面并移动
+                switchTab(targetContainerId); // 自动切过去看结果
+                commitMove(itemA, sourceContainer, targetContainer, slot.x, slot.y);
+                showToast("已自动存入空位", "success");
+            } else {
+                showToast("目标容器已满，无法存入", "error");
+                revertMove(itemA, sourceContainer);
+            }
+        }
+
+        // --- 核心算法：原子化交换 (Atomic Swap) ---
+        function executeAtomicMove(itemA, targetContainer, targetX, targetY) {
+            const sourceContainer = containers[itemA.containerId];
+            
+            if (!targetContainer.canAcceptType(itemA.type)) {
+                const typeName = { 'weapon':'武器', 'armor':'护甲', 'head':'头盔' }[itemA.type] || itemA.type;
+                showToast(`${targetContainer.id === 'secure' ? '安全箱' : '该容器'} 无法存放 [${typeName}]`, "error");
+                revertMove(itemA, sourceContainer);
+                return;
+            }
+            if (targetX < 0 || targetY < 0 || targetX + itemA.w > targetContainer.cols || targetY + itemA.h > targetContainer.rows) {
+                 revertMove(itemA, sourceContainer);
+                 return;
+            }
+
+            const targetCheck = targetContainer.checkCollision(targetX, targetY, itemA.w, itemA.h, [itemA.id]);
+
+            if (targetCheck.valid) {
+                commitMove(itemA, sourceContainer, targetContainer, targetX, targetY);
+                return;
+            }
+
+            const victims = targetCheck.obstacles;
+            let pendingItems = [itemA.id, ...victims.map(v => v.id)];
+            let victimMoves = [];
+            let newlyOccupiedRects = [];
+            const originalRect = { x: itemA.x, y: itemA.y, w: itemA.w, h: itemA.h };
+
+            for (let victim of victims) {
+                if (!sourceContainer.canAcceptType(victim.type)) {
+                    showToast(`源容器无法存放 [${victim.name}]`, "error");
+                    revertMove(itemA, sourceContainer);
+                    return;
+                }
+
+                const isSpaceFree = (cx, cy, cw, ch) => {
+                    const physCheck = sourceContainer.checkCollision(cx, cy, cw, ch, pendingItems);
+                    if (!physCheck.valid) return false;
+                    for (let rect of newlyOccupiedRects) {
+                        if (cx < rect.x + rect.w && cx + cw > rect.x &&
+                            cy < rect.y + rect.h && cy + ch > rect.y) return false;
+                    }
+                    if (sourceContainer === targetContainer) {
+                         if (cx < targetX + itemA.w && cx + cw > targetX &&
+                            cy < targetY + itemA.h && cy + ch > targetY) return false;
+                    }
+                    return true;
+                };
+
+                let bestPos = null;
+                const startX = originalRect.x;
+                const endX = originalRect.x + originalRect.w - victim.w;
+                const startY = originalRect.y;
+                const endY = originalRect.y + originalRect.h - victim.h;
+
+                if (endX >= startX && endY >= startY) {
+                    for (let y = startY; y <= endY; y++) {
+                        for (let x = startX; x <= endX; x++) {
+                            if (isSpaceFree(x, y, victim.w, victim.h)) {
+                                bestPos = { x, y }; break;
+                            }
+                        }
+                        if (bestPos) break;
+                    }
+                }
+
+                if (!bestPos) {
+                    for (let y = 0; y <= sourceContainer.rows - victim.h; y++) {
+                        for (let x = 0; x <= sourceContainer.cols - victim.w; x++) {
+                            if (isSpaceFree(x, y, victim.w, victim.h)) {
+                                bestPos = { x, y }; break;
+                            }
+                        }
+                        if (bestPos) break;
+                    }
+                }
+
+                if (bestPos) {
+                    victimMoves.push({ item: victim, x: bestPos.x, y: bestPos.y });
+                    newlyOccupiedRects.push({ x: bestPos.x, y: bestPos.y, w: victim.w, h: victim.h });
+                } else {
+                    showToast("空间不足，无法自动交换", "error");
+                    revertMove(itemA, sourceContainer);
+                    return;
+                }
+            }
+
+            commitMove(itemA, sourceContainer, targetContainer, targetX, targetY);
+            for (let move of victimMoves) {
+                commitMove(move.item, targetContainer, sourceContainer, move.x, move.y);
+            }
+            showToast(`交换成功 (移动了 ${victims.length} 个物品)`, "success");
+        }
+
+        function commitMove(item, sourceC, targetC, x, y) {
+            if (sourceC !== targetC) {
+                sourceC.removeItem(item.id);
+                item.containerId = targetC.id;
+                targetC.items.push(item);
+                targetC.element.appendChild(item.element);
+            }
+            item.x = x;
+            item.y = y;
+            targetC.renderItem(item);
+        }
+
+        function revertMove(item, container) {
+            container.renderItem(item);
+        }
+
+        function showToast(msg, type = "info") {
+            const container = document.getElementById('toast-container');
+            const el = document.createElement('div');
+            el.className = `toast ${type}`;
+            el.textContent = msg;
+            container.appendChild(el);
+            setTimeout(() => el.remove(), 2500);
+        }
+
+        init();
+    </script>
+</body>
+</html>
