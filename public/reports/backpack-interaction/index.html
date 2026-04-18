@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<title>AI 鏃朵唬鐨勭瓥鍒掑伐浣滄柟寮?鈥?浜旈〉姹囨姤</title>
+<title>AI 时代的策划工作方式 — 五页汇报</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
   :root{
@@ -79,7 +79,7 @@
   }
   .slide-inner{ position: relative; padding-left: 36px; height: 100%; display: flex; flex-direction: column;}
 
-  /* === 椤堕儴 meta === */
+  /* === 顶部 meta === */
   .meta-row{
     display: flex; align-items: center; gap: 20px;
     color: var(--text-3);
@@ -104,7 +104,7 @@
     background: rgba(212,175,106,0.06);
   }
 
-  /* === 涓绘爣棰?=== */
+  /* === 主标题 === */
   h1.title{
     font-size: 48px;
     line-height: 1.18;
@@ -127,7 +127,7 @@
   .subtitle.sm{ margin-bottom: 24px; font-size: 15px;}
   .subtitle b{ color: var(--gold-light); font-weight: 500;}
 
-  /* === 椤佃剼 === */
+  /* === 页脚 === */
   .footer{
     position: absolute;
     left: 80px; right: 80px; bottom: 24px;
@@ -138,7 +138,7 @@
   }
   .footer .pn{ color: var(--gold); font-weight: 500; font-feature-settings: "tnum";}
 
-  /* === 涓夊ぇ鍘熷垯 === */
+  /* === 三大原则 === */
   .principles-row{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -207,7 +207,7 @@
     white-space: nowrap;
   }
 
-  /* === Demo 宓屽叆 === */
+  /* === Demo 嵌入 === */
   .demo-block{
     border: 1px solid rgba(212,175,106,0.3);
     border-radius: 14px;
@@ -231,7 +231,7 @@
   }
   .demo-head .left{ display: flex; align-items: center; gap: 10px; color: var(--gold-light);}
   .demo-head .left::before{
-    content:"鈼?; color: #4ade80; font-size: 10px;
+    content:"●"; color: #4ade80; font-size: 10px;
     text-shadow: 0 0 8px #4ade80;
     animation: pulse 1.6s ease-in-out infinite;
   }
@@ -253,7 +253,7 @@
   }
   .demo-frame{ width: 100%; height: 100%; border: none; display: block;}
 
-  /* === 鏁板瓧瀵规瘮锛堢 2 椤碉級=== */
+  /* === 数字对比（第 2 页）=== */
   .compare-block{ margin-bottom: 28px; position: relative;}
   .compare-block .lbl{
     font-size: 11px;
@@ -319,7 +319,7 @@
   .punch .text{ font-size: 22px; font-weight: 400; color: var(--text-1); line-height: 1.5;}
   .punch .text em{ font-style: normal; color: var(--gold-light); font-weight: 600; border-bottom: 1px solid var(--gold-deep); padding-bottom: 1px;}
 
-  /* === 绗?3 椤? 鏍囬厤 + 妗堜緥 === */
+  /* === 第 3 页: 标配 + 案例 === */
   .standard-grid{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -341,7 +341,7 @@
     box-shadow: 0 0 32px rgba(212,175,106,0.12);
   }
   .std-card.feature::after{
-    content:"鏍稿績"; position: absolute;
+    content:"核心"; position: absolute;
     top: 18px; right: 18px;
     font-size: 9.5px;
     letter-spacing: 0.32em;
@@ -445,7 +445,7 @@
   }
   .case-link:hover{ color: var(--gold-light); text-decoration: underline;}
 
-  /* === 绗?4 椤? Agent + Memory + Skill 鏋舵瀯鍥?=== */
+  /* === 第 4 页: Agent + Memory + Skill 架构图 === */
   .arch-wrap{
     flex: 1;
     display: flex;
@@ -459,33 +459,57 @@
     align-items: center;
   }
   .arch-layer .lbl-side{
-    flex: 0 0 100px;
-    font-size: 10px;
-    letter-spacing: 0.32em;
-    color: var(--text-3);
-    text-transform: uppercase;
+    flex: 0 0 118px;
     text-align: right;
     padding-right: 26px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    align-items: flex-end;
   }
   .arch-layer .lbl-side::after{
     content:""; position: absolute;
     right: 10px; top: 50%;
-    width: 8px; height: 8px;
+    width: 10px; height: 10px;
     border-radius: 50%;
     background: var(--gold);
     transform: translateY(-50%);
     box-shadow: 0 0 12px rgba(212,175,106,0.5);
+    border: 2px solid #0A0913;
+    box-sizing: content-box;
+  }
+  .arch-layer .lbl-side .st{
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    color: var(--text-4);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .arch-layer .lbl-side .en{
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 1px 0 2px;
   }
   .arch-layer .lbl-side .who{
     display: block;
-    font-size: 14px;
-    color: var(--text-1);
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    text-transform: none;
-    margin-top: 2px;
+    font-size: 11.5px;
+    color: var(--text-2);
+    font-weight: 600;
+    letter-spacing: 0.04em;
   }
+  /* stage 配色 */
+  .arch-layer.human .lbl-side .en{ color: var(--gold); }
+  .arch-layer.human .lbl-side::after{ background: var(--gold); box-shadow: 0 0 12px rgba(212,175,106,0.6);}
+  .arch-layer.agent .lbl-side .en{ color: var(--gold-light); }
+  .arch-layer.agent .lbl-side::after{ background: var(--gold-light); box-shadow: 0 0 14px rgba(232,203,142,0.7);}
+  .arch-layer.triplet .lbl-side .en{ color: var(--purple); }
+  .arch-layer.triplet .lbl-side::after{ background: var(--purple); box-shadow: 0 0 14px rgba(153,134,214,0.7);}
+  .arch-layer.output .lbl-side .en{ color: var(--new); }
+  .arch-layer.output .lbl-side::after{ background: var(--new); box-shadow: 0 0 14px rgba(107,175,168,0.7);}
   .arch-layer .content{ flex: 1;}
   .arch-layer.human .content{
     padding: 14px 24px;
@@ -519,8 +543,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 100px;
-    height: 20px;
+    margin-left: 118px;
+    height: 22px;
     position: relative;
   }
   .arch-arrow::before{
@@ -530,8 +554,15 @@
     background: linear-gradient(90deg, transparent 2%, rgba(212,175,106,0.4) 25%, rgba(212,175,106,0.5) 50%, rgba(212,175,106,0.4) 75%, transparent 98%);
     transform: translateY(-0.5px);
   }
+  /* 箭头按方向做渐变色 */
+  .arch-arrow.to-triplet::before{
+    background: linear-gradient(90deg, transparent 2%, rgba(232,203,142,0.45) 25%, rgba(153,134,214,0.5) 75%, transparent 98%);
+  }
+  .arch-arrow.to-output::before{
+    background: linear-gradient(90deg, transparent 2%, rgba(153,134,214,0.45) 25%, rgba(107,175,168,0.5) 75%, transparent 98%);
+  }
   .arch-arrow span{
-    padding: 2px 14px;
+    padding: 3px 16px;
     background: #0A0913;
     font-size: 10px;
     letter-spacing: 0.35em;
@@ -539,14 +570,11 @@
     text-transform: uppercase;
     position: relative;
     z-index: 2;
-    display: inline-flex; align-items: center; gap: 10px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-weight: 600;
   }
-  .arch-arrow span::before,
-  .arch-arrow span::after{
-    content:""; width: 4px; height: 4px; border-radius: 50%;
-    background: var(--gold);
-    box-shadow: 0 0 6px rgba(212,175,106,0.7);
-  }
+  .arch-arrow.to-triplet span{ color: #B8A8E8; }
+  .arch-arrow.to-output span{ color: #93D6CF; }
 
   .arch-layer.agent .content{
     padding: 14px 24px;
@@ -586,6 +614,9 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
+  }
+  .arch-layer.triplet .arch-three{
+    flex: 1;
   }
   .arch-pillar{
     padding: 18px 20px 20px;
@@ -685,7 +716,7 @@
     color: var(--gold-light);
   }
 
-  /* === 绗?5 椤? GnG 鍥㈤槦鍗忎綔鏂扮粨鏋?=== */
+  /* === 第 5 页: GnG 团队协作新结构 === */
   .codex-core{
     padding: 18px 28px;
     background:
@@ -842,7 +873,7 @@
     gap: 6px;
   }
   .layer-spot .sp-label::before{
-    content:"鈼?;
+    content:"◆";
     font-size: 7px;
     color: var(--gold);
     opacity: 0.85;
@@ -919,12 +950,186 @@
   .mnemonic .m-item b{ color: var(--gold-light); font-weight: 700; font-size: 14px; letter-spacing: -0.02em;}
   .mnemonic .m-dot{ color: var(--text-4); font-size: 12px;}
 
-  /* === 鍝嶅簲寮?=== */
-  @media (max-width: 1700px){ .slide{ transform: scale(0.92); transform-origin: top center;} }
-  @media (max-width: 1500px){ .slide{ transform: scale(0.82);} }
-  @media (max-width: 1300px){ .slide{ transform: scale(0.72);} }
-  @media (max-width: 1100px){ .slide{ transform: scale(0.62);} }
-  @media (max-width: 900px){ .slide{ transform: scale(0.52);} }
+  /* === 响应式 === */
+  /* === 桌面端 PPT 等比缩放 === */
+  @media (max-width: 1700px) and (min-width: 901px){ .slide{ transform: scale(0.92); transform-origin: top center;} }
+  @media (max-width: 1500px) and (min-width: 901px){ .slide{ transform: scale(0.82);} }
+  @media (max-width: 1300px) and (min-width: 901px){ .slide{ transform: scale(0.72);} }
+  @media (max-width: 1100px) and (min-width: 901px){ .slide{ transform: scale(0.62);} }
+
+  /* === 平板/小屏（≤ 900px）：取消缩放,改为流式 === */
+  @media (max-width: 900px){
+    body{ font-size: 14px;}
+    .deck{ gap: 18px; padding: 16px 10px 36px;}
+    .slide{
+      width: 100%;
+      max-width: 720px;
+      height: auto;
+      min-height: 0;
+      padding: 28px 20px 36px;
+      border-radius: 14px;
+      transform: none !important;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.45);
+    }
+    .slide::after{ display: none; }
+    .slide::before{ background-size: 36px 36px; opacity: 0.6;}
+    .slide-inner{ padding-left: 0; height: auto;}
+
+    /* meta 行紧凑 */
+    .meta-row{
+      gap: 10px;
+      font-size: 9.5px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .meta-row .pill{ font-size: 9px; padding: 3px 8px;}
+    .meta-row .sep{ width: 18px;}
+
+    /* 标题 */
+    h1.title{ font-size: 26px; line-height: 1.28; margin-bottom: 10px;}
+    h1.title.sm{ font-size: 23px;}
+    h1.title.xs{ font-size: 21px;}
+    .subtitle{ font-size: 13px; line-height: 1.55; margin-bottom: 18px;}
+    .subtitle.sm{ font-size: 12.5px; margin-bottom: 16px;}
+
+    /* footer */
+    .footer{ font-size: 9.5px; gap: 12px;}
+
+    /* === 第 1 页 === */
+    .principles-row{ grid-template-columns: 1fr; gap: 12px; margin-bottom: 16px;}
+    .principle-card{ padding: 16px 16px 18px; border-radius: 10px;}
+    .principle-card::before{ width: 80px; height: 80px;}
+    .pc-headline{ font-size: 15px; line-height: 1.4;}
+    .pc-num{ font-size: 11px; letter-spacing: 0.22em;}
+    .pc-arrow-line{ font-size: 9.5px; letter-spacing: 0.16em;}
+    .pc-tags .pt{ font-size: 11px; padding: 4px 9px;}
+    .demo-block{ height: 320px; border-radius: 10px;}
+    .demo-head{ padding: 6px 10px; font-size: 10.5px;}
+
+    /* === 第 2 页 === */
+    .compare-block{ margin-bottom: 22px;}
+    .compare-block .lbl{ font-size: 10px; letter-spacing: 0.22em;}
+    .compare-block .lbl .tag{ font-size: 9.5px; padding: 2px 8px;}
+    .compare-line{ gap: 16px; flex-wrap: wrap;}
+    .compare-block.primary .num-old,
+    .compare-block.primary .num-new{ font-size: 42px;}
+    .compare-block.primary .num-old .unit,
+    .compare-block.primary .num-new .unit{ font-size: 18px;}
+    .compare-block.primary .arrow{ font-size: 24px;}
+    .compare-block.secondary .num-old,
+    .compare-block.secondary .num-new{ font-size: 26px;}
+    .compare-block.secondary .num-old .unit,
+    .compare-block.secondary .num-new .unit{ font-size: 14px;}
+    .compare-block.secondary .arrow{ font-size: 18px;}
+    .compare-desc{ font-size: 11px !important; flex-wrap: wrap; gap: 6px !important;}
+    .compare-block.primary .compare-desc .left,
+    .compare-block.primary .compare-desc .right,
+    .compare-block.secondary .compare-desc .left,
+    .compare-block.secondary .compare-desc .right{ width: auto !important;}
+    .punch{ padding: 14px 16px; gap: 12px;}
+    .punch .qmark{ font-size: 36px;}
+    .punch .text{ font-size: 15px; line-height: 1.55;}
+
+    /* === 第 3 页 === */
+    .standard-grid{ grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px;}
+    .std-card{ padding: 14px 12px;}
+    .cases-head{ flex-wrap: wrap; gap: 10px; margin-bottom: 12px;}
+    .cases-head .h{ font-size: 14px;}
+    .cases-grid{ grid-template-columns: 1fr; gap: 10px;}
+    .case-card{ padding: 12px 14px;}
+
+    /* === 第 4 页 === */
+    .arch-layer{ flex-direction: column; align-items: stretch; gap: 10px;}
+    .arch-layer .lbl-side{
+      flex: 0 0 auto;
+      text-align: left;
+      align-items: flex-start;
+      padding: 10px 14px 10px 22px;
+      border-left: 2px solid rgba(212,175,106,0.4);
+      border-radius: 0 6px 6px 0;
+      background: rgba(255,255,255,0.02);
+    }
+    .arch-layer .lbl-side::after{
+      right: auto; left: -7px;
+      width: 8px; height: 8px;
+      top: 50%;
+    }
+    .arch-layer .lbl-side .st{ font-size: 8.5px;}
+    .arch-layer .lbl-side .en{ font-size: 12px; margin: 1px 0;}
+    .arch-layer .lbl-side .who{ font-size: 11px;}
+    .arch-arrow{
+      margin-left: 0 !important;
+      height: 14px !important;
+      align-items: center;
+      justify-content: center;
+    }
+    .arch-arrow::before{ width: 1px; height: 100%;}
+    .arch-arrow span{ font-size: 9.5px; padding: 0 8px;}
+    .arch-three{ grid-template-columns: 1fr; gap: 10px;}
+    .arch-pillar{ padding: 12px 14px;}
+    .arch-layer.human .content,
+    .arch-layer.agent .content,
+    .arch-layer.output .content{ padding: 12px 14px;}
+    .arch-layer.human .action{ font-size: 14px;}
+    .arch-layer.human .hint{ font-size: 11px;}
+    .arch-layer.agent .agent-name{ font-size: 15px;}
+    .arch-layer.agent .agent-sub{ font-size: 11px;}
+    .arch-layer.agent .agent-role{ flex-wrap: wrap; gap: 6px;}
+    .arch-layer.agent .agent-role .r{ font-size: 10.5px;}
+
+    /* === 第 5 页 === */
+    .codex-core{ grid-template-columns: 1fr; gap: 10px; padding: 14px;}
+    .codex-core .core-piece + .core-piece{ border-left: none; border-top: 1px solid var(--line); padding-top: 10px;}
+    .codex-core .core-piece.center{ padding: 0;}
+    .codex-core .core-name{ font-size: 16px;}
+    .codex-core .core-piece.center .core-name{ font-size: 19px;}
+
+    .layers-4{ gap: 8px;}
+    .layers-4::before{ left: 16px; top: 18px; bottom: 18px;}
+    .layer-row{
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 12px 14px 12px 30px;
+    }
+    .layer-row::before{ left: 16px; top: 22px; transform: translateX(-50%); width: 10px; height: 10px;}
+    .layer-head{ gap: 8px;}
+    .layer-head .lv{ font-size: 22px;}
+    .layer-head .lname{ font-size: 14px;}
+    .layer-body .who{ font-size: 12.5px;}
+    .layer-body .what{ font-size: 11.5px;}
+    .layer-spot{ padding: 8px 12px;}
+    .layer-spot::before{ width: 5px; height: 5px;}
+    .layer-spot .sp-label{ font-size: 9.5px;}
+    .layer-spot .sp-content{ font-size: 12px;}
+    .mnemonic{ flex-wrap: wrap; gap: 6px; padding: 12px 14px;}
+    .mnemonic .m-lead{ font-size: 11px;}
+    .mnemonic .m-item{ font-size: 12px;}
+
+    /* deck-foot 紧凑 */
+    .deck-foot{ font-size: 10px !important; padding: 12px 8px !important;}
+  }
+
+  /* === 手机（≤ 480px）：进一步精细化 === */
+  @media (max-width: 480px){
+    .deck{ padding: 12px 6px 24px;}
+    .slide{ padding: 22px 14px 28px; border-radius: 10px;}
+    h1.title{ font-size: 22px;}
+    h1.title.sm{ font-size: 20px;}
+    h1.title.xs{ font-size: 18px;}
+    .subtitle{ font-size: 12.5px;}
+    .subtitle.sm{ font-size: 12px;}
+
+    .standard-grid{ grid-template-columns: 1fr;}
+    .demo-block{ height: 280px;}
+
+    .compare-block.primary .num-old,
+    .compare-block.primary .num-new{ font-size: 34px;}
+    .compare-block.primary .num-old .unit,
+    .compare-block.primary .num-new .unit{ font-size: 14px;}
+
+    .punch .text{ font-size: 14px;}
+  }
+
 
   .slide{ opacity: 0; transform: translateY(20px); animation: fadein .9s ease-out forwards;}
   .slide:nth-child(2){ animation-delay: .12s;}
@@ -943,9 +1148,10 @@
 </style>
 </head>
 <body>
+
 <div class="deck">
 
-  <!-- ============== 绗?1 椤碉細AI 鑳藉仛浠€涔?============== -->
+  <!-- ============== 第 1 页：AI 能做什么 ============== -->
   <section class="slide">
     <div class="slide-inner">
 
@@ -954,47 +1160,47 @@
         <span class="sep"></span>
         <span>What AI Can Do</span>
         <span class="sep"></span>
-        <span class="pill highlight">AI 鑳藉仛浠€涔?路 鑳屽寘浜や簰妗堜緥</span>
+        <span class="pill highlight">AI 能做什么 · 背包交互案例</span>
       </div>
 
-      <h1 class="title sm">浜鸿剳閲岀殑<em>涓夋潯鍘熷垯</em> 鈫?AI 灞曞紑鎴愬畬鏁存柟妗?/h1>
-      <p class="subtitle sm">鏍锋湰:鑳屽寘鎷栨嫿浜や簰閲嶆瀯 路 涓嬫柟 Demo 鍙洿鎺ユ嫋鎷戒綋楠屻€?/p>
+      <h1 class="title sm">人脑里的<em>三条原则</em> → AI 展开成完整方案</h1>
+      <p class="subtitle sm">样本:背包拖拽交互重构 · 下方 Demo 可直接拖拽体验。</p>
 
       <div class="principles-row">
 
         <div class="principle-card">
           <div class="pc-num">PRINCIPLE 01</div>
-          <div class="pc-headline">鎵撶牬"鍚屽ぇ灏?br/>鎵嶈兘浜掓崲"</div>
-          <div class="pc-arrow-line"><span>AI 鑷姩灞曞紑涓?/span><span class="line"></span></div>
+          <div class="pc-headline">打破"同大小<br/>才能互换"</div>
+          <div class="pc-arrow-line"><span>AI 自动展开为</span><span class="line"></span></div>
           <div class="pc-tags">
-            <span class="pt">妯℃嫙鐜绠楁硶</span>
-            <span class="pt">鍙楁尋鍘嬪洖濉?/span>
-            <span class="pt">鏁翠綋鎾ら攢鏈哄埗</span>
-            <span class="pt">Toast 缁熶竴</span>
+            <span class="pt">模拟环境算法</span>
+            <span class="pt">受挤压回填</span>
+            <span class="pt">整体撤销机制</span>
+            <span class="pt">Toast 统一</span>
           </div>
         </div>
 
         <div class="principle-card">
           <div class="pc-num">PRINCIPLE 02</div>
-          <div class="pc-headline">鑳藉師鍦颁氦鎹?br/>灏变笉瑕佸洓澶勪贡椋?/div>
-          <div class="pc-arrow-line"><span>AI 鑷姩灞曞紑涓?/span><span class="line"></span></div>
+          <div class="pc-headline">能原地交换<br/>就不要四处乱飞</div>
+          <div class="pc-arrow-line"><span>AI 自动展开为</span><span class="line"></span></div>
           <div class="pc-tags">
-            <span class="pt">鍘熶綅鍥炲～浼樺厛</span>
-            <span class="pt">鍏ㄥ眬瀵绘壘鍏滃簳</span>
-            <span class="pt">閬胯宸插崰鏂颁綅</span>
-            <span class="pt">绂佽法瀹瑰櫒閫冮€?/span>
+            <span class="pt">原位回填优先</span>
+            <span class="pt">全局寻找兜底</span>
+            <span class="pt">避让已占新位</span>
+            <span class="pt">禁跨容器逃逸</span>
           </div>
         </div>
 
         <div class="principle-card">
           <div class="pc-num">PRINCIPLE 03</div>
-          <div class="pc-headline">鑳戒袱涓鍣?br/>灏变笉瑕佹秹鍙婄涓変釜</div>
-          <div class="pc-arrow-line"><span>AI 鑷姩灞曞紑涓?/span><span class="line"></span></div>
+          <div class="pc-headline">能两个容器<br/>就不要涉及第三个</div>
+          <div class="pc-arrow-line"><span>AI 自动展开为</span><span class="line"></span></div>
           <div class="pc-tags">
-            <span class="pt">涓夎壊鍙嶉</span>
-            <span class="pt">姣绾цЕ鎰?/span>
-            <span class="pt">鍍忕礌绾ц瑙?/span>
-            <span class="pt">杈圭紭鑷姩婊氬姩</span>
+            <span class="pt">三色反馈</span>
+            <span class="pt">毫秒级触感</span>
+            <span class="pt">像素级视觉</span>
+            <span class="pt">边缘自动滚动</span>
           </div>
         </div>
 
@@ -1002,20 +1208,20 @@
 
       <div class="demo-block">
         <div class="demo-head">
-          <div class="left">浜や簰 Demo 路 鐗╁搧鎷栨嫿婕旂ず (鎷栧姩鐗╁搧鍒颁笉鍚屽鍣ㄨ瘯璇?</div>
-          <div class="right"><a href="鐗╁搧鎷栨嫿婕旂ず.html" target="_blank">鍦ㄦ柊绐楀彛鎵撳紑 鈫?/a></div>
+          <div class="left">交互 Demo · 物品拖拽演示 (拖动物品到不同容器试试)</div>
+          <div class="right"><a href="demo.html" target="_blank">在新窗口打开 ↗</a></div>
         </div>
-        <iframe class="demo-frame" src="鐗╁搧鎷栨嫿婕旂ず.html" title="鐗╁搧鎷栨嫿婕旂ず"></iframe>
+        <iframe class="demo-frame" src="demo.html" title="物品拖拽演示"></iframe>
       </div>
 
       <div class="footer">
-        <span>GNG: Gold and Glory 路 绯荤粺缁?路 浜庢竻婧?/span>
-        <span class="pn">鈥?01 鈥?/span>
+        <span>GNG: Gold and Glory · 系统组 · 于清源</span>
+        <span class="pn">— 01 —</span>
       </div>
     </div>
   </section>
 
-  <!-- ============== 绗?2 椤碉細AI 鐨勬彁鏁?============== -->
+  <!-- ============== 第 2 页：AI 的提效 ============== -->
   <section class="slide">
     <div class="slide-inner">
 
@@ -1024,52 +1230,52 @@
         <span class="sep"></span>
         <span>Efficiency Gain</span>
         <span class="sep"></span>
-        <span class="pill">AI 鐨勬彁鏁?路 閲忓寲鎴愭灉</span>
+        <span class="pill">AI 的提效 · 量化成果</span>
       </div>
 
-      <h1 class="title">鍚岀瓑娣卞害鐨勬柟妗?br/>鎶曞叆闄嶄竴涓暟閲忕骇,璐ㄩ噺鍙嶈€?em>鏇撮珮</em></h1>
+      <h1 class="title">同等深度的方案<br/>投入降一个数量级,质量反而<em>更高</em></h1>
 
       <div class="compare-block primary">
-        <div class="lbl">绛栧垝渚?路 璁捐鎺ㄦ紨 <span class="tag">Designer Time</span></div>
+        <div class="lbl">策划侧 · 设计推演 <span class="tag">Designer Time</span></div>
         <div class="compare-line">
-          <span class="num-old">5<span class="unit">澶?/span></span>
-          <span class="arrow">鉄?/span>
-          <span class="num-new">30<span class="unit">鍒嗛挓</span></span>
+          <span class="num-old">5<span class="unit">天</span></span>
+          <span class="arrow">⟶</span>
+          <span class="num-new">10<span class="unit">分钟</span></span>
         </div>
         <div class="compare-desc">
-          <span class="left">鎵嬪伐绌蜂妇 case 脳 杈圭晫</span>
+          <span class="left">手工穷举 case × 边界</span>
           <span style="color:var(--text-4); margin: 0 16px;">|</span>
-          <span class="right">缁欏師鍒?路 AI 绔嬪埢灞曞紑</span>
+          <span class="right">给原则 · AI 立刻展开</span>
         </div>
       </div>
 
       <div class="compare-block secondary">
-        <div class="lbl">鍥㈤槦渚?路 璇勫涓庡榻?<span class="tag">Review Cost</span></div>
+        <div class="lbl">团队侧 · 评审与对齐 <span class="tag">Review Cost</span></div>
         <div class="compare-line">
-          <span class="num-old">3<span class="unit">灏忔椂瀵嗛泦瀹ｈ</span></span>
-          <span class="arrow">鉄?/span>
-          <span class="num-new">30<span class="unit">鍒嗛挓 Demo 璇勫</span></span>
+          <span class="num-old">3<span class="unit">小时密集宣讲</span></span>
+          <span class="arrow">⟶</span>
+          <span class="num-new">30<span class="unit">分钟 Demo 评审</span></span>
         </div>
         <div class="compare-desc">
-          <span class="left">姣忎汉楂樺害闆嗕腑 路 閫愮粏鑺傚榻?/span>
+          <span class="left">每人高度集中 · 逐细节对齐</span>
           <span style="color:var(--text-4); margin: 0 16px;">|</span>
-          <span class="right">璇曠帺 Demo + 鏂囨。娓呮櫚</span>
+          <span class="right">试玩 Demo + 文档清晰</span>
         </div>
       </div>
 
       <div class="punch">
         <div class="qmark">"</div>
-        <div class="text">绛栧垝浠庡啓缁嗚妭鐨?em>鎵ц鑰?/em>,鍙樻垚鎷嶅師鍒欑殑<em>鍐崇瓥鑰?/em>銆?/div>
+        <div class="text">策划从写细节的<em>执行者</em>,变成拍原则的<em>决策者</em>。</div>
       </div>
 
       <div class="footer">
-        <span>GNG: Gold and Glory 路 绯荤粺缁?路 浜庢竻婧?/span>
-        <span class="pn">鈥?02 鈥?/span>
+        <span>GNG: Gold and Glory · 系统组 · 于清源</span>
+        <span class="pn">— 02 —</span>
       </div>
     </div>
   </section>
 
-  <!-- ============== 绗?3 椤碉細AI 鏃朵唬涓嬬殑鏂扮瓥鍒?============== -->
+  <!-- ============== 第 3 页：AI 时代下的新策划 ============== -->
   <section class="slide">
     <div class="slide-inner">
 
@@ -1078,98 +1284,98 @@
         <span class="sep"></span>
         <span>New Standard</span>
         <span class="sep"></span>
-        <span class="pill">AI 鏃朵唬涓嬬殑鏂扮瓥鍒?路 鏈潵鏍囬厤 + 瀹炶瘉</span>
+        <span class="pill">AI 时代下的新策划 · 未来标配 + 实证</span>
       </div>
 
-      <h1 class="title sm">鏈潵绛栧垝鏂规鐨?em>鏂版爣閰?/em></h1>
-      <p class="subtitle sm">鍥涢」榛樿浜や粯鏍囧噯 鈥?鐢?AI 鎶?鍩虹嚎姘翠綅"鏁翠綋鎶珮涓€妗ｃ€?/p>
+      <h1 class="title sm">未来策划方案的<em>新标配</em></h1>
+      <p class="subtitle sm">四项默认交付标准 — 用 AI 把"基线水位"整体抬高一档。</p>
 
       <div class="standard-grid">
         <div class="std-card feature">
           <div class="std-num">01</div>
-          <div class="std-title">渚ч噸浣撻獙璁ㄨ<br/>鑰岄潪瀹炵幇缁嗚妭</div>
-          <div class="std-desc">涓讳綋璁ㄨ"鐜╁鎰熷彈鍒颁粈涔?,缁嗚妭浜?AI 灞曞紑銆?/div>
+          <div class="std-title">侧重体验讨论<br/>而非实现细节</div>
+          <div class="std-desc">主体讨论"玩家感受到什么",细节交 AI 展开。</div>
           <div class="std-tags">
-            <span class="t">浣撻獙瑙嗚</span><span class="t">鍘熷垯鍏堣</span><span class="t">灏戠湅閰嶇疆琛?/span>
+            <span class="t">体验视角</span><span class="t">原则先行</span><span class="t">少看配置表</span>
           </div>
         </div>
         <div class="std-card">
           <div class="std-num">02</div>
-          <div class="std-title">鏂规瀹屾暣搴︽洿楂?/div>
-          <div class="std-desc">杈圭晫 / 瑙嗚 / 瑙︽劅 / 閰嶇疆 / 鏈湴鍖?涓€娆¤ˉ榻愩€?/div>
+          <div class="std-title">方案完整度更高</div>
+          <div class="std-desc">边界 / 视觉 / 触感 / 配置 / 本地化 一次补齐。</div>
           <div class="std-tags">
-            <span class="t">娣卞害</span><span class="t">骞垮害</span><span class="t">鏃犻仐婕?/span>
+            <span class="t">深度</span><span class="t">广度</span><span class="t">无遗漏</span>
           </div>
         </div>
         <div class="std-card">
           <div class="std-num">03</div>
-          <div class="std-title">鎻愪緵鍙氦浜?br/>Demo 璇曠帺</div>
-          <div class="std-desc">浠?鐪嬫枃妗?鍒?鎽稿緱鍒般€佺帺寰楀埌"銆?/div>
+          <div class="std-title">提供可交互<br/>Demo 试玩</div>
+          <div class="std-desc">从"看文档"到"摸得到、玩得到"。</div>
           <div class="std-tags">
-            <span class="t">鍓嶇疆楠岃瘉</span><span class="t">鎵€瑙佸嵆鎵€寰?/span><span class="t">闄嶄綆娌熼€氭垚鏈?/span>
+            <span class="t">前置验证</span><span class="t">所见即所得</span><span class="t">降低沟通成本</span>
           </div>
         </div>
         <div class="std-card">
           <div class="std-num">04</div>
-          <div class="std-title">璺ㄦ柟鍚?br/>閮借兘鍐欏嚭缁嗘</div>
-          <div class="std-desc">绯荤粺 / 鐜╂硶 / 缇庢湳 / 鏁板€?鍥涜薄闄愰€氬悆銆?/div>
+          <div class="std-title">跨方向<br/>都能写出细案</div>
+          <div class="std-desc">系统 / 玩法 / 美术 / 数值 四象限通吃。</div>
           <div class="std-tags">
-            <span class="t">閫氭墠杈撳嚭</span><span class="t">璺ㄦ柟鍚戝崗浣?/span><span class="t">琛ヤ綅浠栦汉</span>
+            <span class="t">通才输出</span><span class="t">跨方向协作</span><span class="t">补位他人</span>
           </div>
         </div>
       </div>
 
       <div class="cases-block">
         <div class="cases-head">
-          <div class="h">宸茬粡鍦ㄧ敤杩欏鏂规硶鐨勬柟妗?/div>
-          <div class="sub">2.2 - 2.3 涓変釜涓嶅悓鏂瑰悜鐨勫疄璇?/div>
+          <div class="h">已经在用这套方法的方案</div>
+          <div class="sub">2.2 - 2.3 三个不同方向的实证</div>
         </div>
         <div class="cases-grid">
 
           <div class="case-card system">
             <div class="case-head">
-              <span class="case-tag">System 路 绯荤粺</span>
+              <span class="case-tag">System · 系统</span>
               <span class="case-ver">V2.2</span>
             </div>
-            <div class="case-title">鐜╁鐗╁搧绠＄悊浜や簰浣撻獙浼樺寲</div>
-            <div class="case-author">浜庢竻婧?路 鏈眹鎶ユ渚?/div>
-            <div class="case-output"><b>AI 浜у嚭</b>:涓夊師鍒?路 绠楁硶 路 涓夎壊鍙嶉 路 姣绾цЕ鎰?路 HTML Demo</div>
-            <a class="case-link" href="https://wiki.garena.com/pages/viewpage.action?pageId=298609612" target="_blank">鈫?鏌ョ湅 Wiki</a>
+            <div class="case-title">玩家物品管理交互体验优化</div>
+            <div class="case-author">于清源 · 本汇报案例</div>
+            <div class="case-output"><b>AI 产出</b>:三原则 · 算法 · 三色反馈 · 毫秒级触感 · HTML Demo</div>
+            <a class="case-link" href="https://wiki.garena.com/pages/viewpage.action?pageId=298609612" target="_blank">→ 查看 Wiki</a>
           </div>
 
           <div class="case-card gameplay">
             <div class="case-head">
-              <span class="case-tag">Gameplay 路 鐜╂硶</span>
+              <span class="case-tag">Gameplay · 玩法</span>
               <span class="case-ver">V2.3</span>
             </div>
-            <div class="case-title">鑸屽皷涓婄殑鍦扮墷 路 鐑归オ鐜╂硶</div>
-            <div class="case-author">浜庢竻婧?路 澶х郴缁?/div>
-            <div class="case-output"><b>AI 浜у嚭</b>:5 瀛愭枃妗?路 浜斿懗浣撶郴 路 閰嶆柟鍒嗗眰 路 鏁板€艰璁?/div>
-            <a class="case-link" href="https://wiki.garena.com/pages/viewpage.action?pageId=306286528" target="_blank">鈫?鏌ョ湅 Wiki</a>
+            <div class="case-title">舌尖上的地牢 · 烹饪玩法</div>
+            <div class="case-author">于清源 · 大系统</div>
+            <div class="case-output"><b>AI 产出</b>:5 子文档 · 五味体系 · 配方分层 · 数值设计</div>
+            <a class="case-link" href="https://wiki.garena.com/pages/viewpage.action?pageId=306286528" target="_blank">→ 查看 Wiki</a>
           </div>
 
           <div class="case-card art">
             <div class="case-head">
-              <span class="case-tag">Art 路 缇庢湳琛ㄧ幇</span>
+              <span class="case-tag">Art · 美术表现</span>
               <span class="case-ver">V2.3</span>
             </div>
-            <div class="case-title">寤惰繜鎾ょ鐐圭編鏈〃鐜颁紭鍖?/div>
-            <div class="case-author">ATA 路 缇庢湳鍚?/div>
-            <div class="case-output"><b>AI 浜у嚭</b>:2 杩唬鏂瑰悜 路 6 鍙傝€冩蹇?路 妯悜瀵规瘮 路 5 鐘舵€佽瑙?/div>
-            <a class="case-link" href="https://wiki.garena.com/pages/viewpage.action?pageId=306293980" target="_blank">鈫?鏌ョ湅 Wiki</a>
+            <div class="case-title">延迟撤离点美术表现优化</div>
+            <div class="case-author">ATA · 美术向</div>
+            <div class="case-output"><b>AI 产出</b>:2 迭代方向 · 6 参考概念 · 横向对比 · 5 状态视觉</div>
+            <a class="case-link" href="https://wiki.garena.com/pages/viewpage.action?pageId=306293980" target="_blank">→ 查看 Wiki</a>
           </div>
 
         </div>
       </div>
 
       <div class="footer">
-        <span>GNG: Gold and Glory 路 绯荤粺缁?路 浜庢竻婧?/span>
-        <span class="pn">鈥?03 鈥?/span>
+        <span>GNG: Gold and Glory · 系统组 · 于清源</span>
+        <span class="pn">— 03 —</span>
       </div>
     </div>
   </section>
 
-  <!-- ============== 绗?4 椤碉細AI 鏃朵唬涓嬬殑绛栧垝宸ュ叿 ============== -->
+  <!-- ============== 第 4 页：AI 时代下的策划工具 ============== -->
   <section class="slide">
     <div class="slide-inner">
 
@@ -1178,138 +1384,157 @@
         <span class="sep"></span>
         <span>My AI Toolchain</span>
         <span class="sep"></span>
-        <span class="pill">AI 鏃朵唬涓嬬殑绛栧垝宸ュ叿 路 Agent + Memory + Skill</span>
+        <span class="pill">AI 时代下的策划工具 · Agent + Memory + Skill</span>
       </div>
 
-      <h1 class="title sm">AI 涓嶆槸"闂瓟鏈哄櫒浜?<br/>鑰屾槸<em>鍙粍瑁呯殑宸ヤ綔娴?/em></h1>
-      <p class="subtitle sm"><b>浜哄畾鏂瑰悜 鈫?Agent 鎵ц 鈫?Skill 脳 Memory 脳 Tools 鈫?浜や粯</b></p>
+      <h1 class="title sm">AI 不是"问答机器人"<br/>而是<em>可组装的工作流</em></h1>
+      <p class="subtitle sm"><b>人定方向 → Agent 执行 → Skill × Memory × Tools → 交付</b></p>
 
       <div class="arch-wrap">
 
-        <!-- Layer 1: 浜?-->
+        <!-- Stage 01: 人 -->
         <div class="arch-layer human">
-          <div class="lbl-side">Layer 1<span class="who">浜?/span></div>
+          <div class="lbl-side">
+            <span class="st">Stage 01</span>
+            <span class="en">INPUT</span>
+            <span class="who">人 · 决策</span>
+          </div>
           <div class="content">
-            <span class="action">瀹氬師鍒?/span>
-            <span class="action">鎷嶆澘鍙栬垗</span>
-            <span class="action">缁欏弽棣?/span>
-            <span class="action">娌夋穩缁忛獙</span>
-            <span class="hint">鍙仛"<b>涓嶅彲澶栧寘鐨勫垽鏂?/b>"</span>
+            <span class="action">定原则</span>
+            <span class="action">拍板取舍</span>
+            <span class="action">给反馈</span>
+            <span class="action">沉淀经验</span>
+            <span class="hint">只做"<b>不可外包的判断</b>"</span>
           </div>
         </div>
 
-        <div class="arch-arrow"><span>鍞ら啋 路 鎸囦护 路 涓婁笅鏂?/span></div>
+        <div class="arch-arrow to-agent"><span>唤醒 · 指令 · 上下文 ▼</span></div>
 
-        <!-- Layer 2: Agent -->
+        <!-- Stage 02: Agent -->
         <div class="arch-layer agent">
-          <div class="lbl-side">Layer 2<span class="who">Agent</span></div>
+          <div class="lbl-side">
+            <span class="st">Stage 02</span>
+            <span class="en">ENGINE</span>
+            <span class="who">Agent · 执行</span>
+          </div>
           <div class="content">
             <div class="agent-icon">A</div>
             <div>
-              <div class="agent-name">涓撳睘鍖?AI Agent</div>
-              <div class="agent-sub">鍙?AGENTS.md 绾︽潫 路 鎸夋垜鐨勬柟寮忔墽琛?路 閬囧喅绛栧繀鍙嶉棶</div>
+              <div class="agent-name">专属化 AI Agent</div>
+              <div class="agent-sub">受 AGENTS.md 约束 · 按我的方式执行 · 遇决策必反问</div>
             </div>
             <div class="agent-role">
-              <span class="r">鎵ц寮曟搸</span>
-              <span class="r">宸ヤ綔娴佺紪鎺?/span>
-              <span class="r">瑙勫垯瀹堟姢</span>
+              <span class="r">执行引擎</span>
+              <span class="r">工作流编排</span>
+              <span class="r">规则守护</span>
             </div>
           </div>
         </div>
 
-        <div class="arch-arrow"><span>璋冪敤涓夋敮鏌?/span></div>
+        <div class="arch-arrow to-triplet"><span>调用三支柱 ▼</span></div>
 
-        <!-- Layer 3: 涓夋敮鏌?-->
-        <div class="arch-three">
-
-          <div class="arch-pillar skill">
-            <div class="arch-pillar-head">
-              <div class="ico">S</div>
-              <div class="tl">
-                <span class="name">Skill</span>
-                <span class="sub">Methodology 路 鏂规硶璁?/span>
-              </div>
-            </div>
-            <div class="role-tagline">灏佽"<b>鎬庝箞鍋?/b>" 路 涓€娆℃矇娣€姘镐箙澶嶇敤</div>
-            <ul class="items">
-              <li>yqy 路 鍔熻兘瑙勬牸</li>
-              <li>miniyqy 路 璁ㄨ绋?/li>
-              <li>灏忕晠 路 鎴樻枟閰嶇疆</li>
-              <li>wiki-writer</li>
-              <li>skill-generator</li>
-              <li>AI-UI-design</li>
-              <li>game-design-expert</li>
-              <li>...</li>
-            </ul>
+        <!-- Stage 03: 三支柱 -->
+        <div class="arch-layer triplet">
+          <div class="lbl-side">
+            <span class="st">Stage 03</span>
+            <span class="en">CAPABILITY</span>
+            <span class="who">三支柱 · 能力</span>
           </div>
+          <div class="arch-three">
 
-          <div class="arch-pillar memory">
-            <div class="arch-pillar-head">
-              <div class="ico">M</div>
-              <div class="tl">
-                <span class="name">Memory</span>
-                <span class="sub">Context 路 璺ㄤ細璇濊蹇?/span>
+            <div class="arch-pillar skill">
+              <div class="arch-pillar-head">
+                <div class="ico">S</div>
+                <div class="tl">
+                  <span class="name">Skill</span>
+                  <span class="sub">Methodology · 方法论</span>
+                </div>
               </div>
+              <div class="role-tagline">封装"<b>怎么做</b>" · 一次沉淀永久复用</div>
+              <ul class="items">
+                <li>yqy · 功能规格</li>
+                <li>miniyqy · 讨论稿</li>
+                <li>小畅 · 战斗配置</li>
+                <li>wiki-writer</li>
+                <li>skill-generator</li>
+                <li>AI-UI-design</li>
+                <li>game-design-expert</li>
+                <li>...</li>
+              </ul>
             </div>
-            <div class="role-tagline">娌夋穩"<b>鎴戜滑鐨勭粡楠?/b>" 路 鏂颁細璇濈杩涘叆鐘舵€?/div>
-            <ul class="items">
-              <li>INDEX.md 路 绱㈠紩</li>
-              <li>鍐崇瓥鏃ュ織</li>
-              <li>韪╁潙娓呭崟</li>
-              <li>Skill 鍊欓€夋睜</li>
-              <li>鏈В鍐冲緟鍔?/li>
-              <li>椤圭洰瀹硶</li>
-              <li>鍘嗗彶鏂规搴?/li>
-            </ul>
-          </div>
 
-          <div class="arch-pillar tools">
-            <div class="arch-pillar-head">
-              <div class="ico">T</div>
-              <div class="tl">
-                <span class="name">Tools</span>
-                <span class="sub">Integrations 路 宸ュ叿閾?/span>
+            <div class="arch-pillar memory">
+              <div class="arch-pillar-head">
+                <div class="ico">M</div>
+                <div class="tl">
+                  <span class="name">Memory</span>
+                  <span class="sub">Context · 跨会话记忆</span>
+                </div>
               </div>
+              <div class="role-tagline">沉淀"<b>我们的经验</b>" · 新会话秒进入状态</div>
+              <ul class="items">
+                <li>INDEX.md · 索引</li>
+                <li>决策日志</li>
+                <li>踩坑清单</li>
+                <li>Skill 候选池</li>
+                <li>未解决待办</li>
+                <li>项目宪法</li>
+                <li>历史方案库</li>
+              </ul>
             </div>
-            <div class="role-tagline">鎺ュ叆"<b>鐪熷疄涓栫晫</b>" 路 璇诲啓 Wiki / 浠ｇ爜 / Demo</div>
-            <ul class="items">
-              <li>Wiki REST API</li>
-              <li>Python 鑴氭湰</li>
-              <li>Excel / 閰嶇疆琛?/li>
-              <li>HTML Demo 鐢熸垚</li>
-              <li>浠ｇ爜搴?(GnGAgent)</li>
-              <li>Figma MCP</li>
-              <li>WebSearch</li>
-            </ul>
-          </div>
 
+            <div class="arch-pillar tools">
+              <div class="arch-pillar-head">
+                <div class="ico">T</div>
+                <div class="tl">
+                  <span class="name">Tools</span>
+                  <span class="sub">Integrations · 工具链</span>
+                </div>
+              </div>
+              <div class="role-tagline">接入"<b>真实世界</b>" · 读写 Wiki / 代码 / Demo</div>
+              <ul class="items">
+                <li>Wiki REST API</li>
+                <li>Python 脚本</li>
+                <li>Excel / 配置表</li>
+                <li>HTML Demo 生成</li>
+                <li>代码库 (GnGAgent)</li>
+                <li>Figma MCP</li>
+                <li>WebSearch</li>
+              </ul>
+            </div>
+
+          </div>
         </div>
 
-        <div class="arch-arrow"><span>浜у嚭</span></div>
+        <div class="arch-arrow to-output"><span>产出 ▼</span></div>
 
-        <!-- Layer 4: 杈撳嚭 -->
+        <!-- Stage 04: 输出 -->
         <div class="arch-layer output">
-          <div class="lbl-side">Output<span class="who">浜や粯鐗?/span></div>
+          <div class="lbl-side">
+            <span class="st">Stage 04</span>
+            <span class="en">OUTPUT</span>
+            <span class="who">交付物 · 产出</span>
+          </div>
           <div class="content">
-            <span class="o">绛栧垝妗?(Wiki)</span>
-            <span class="o">浜や簰 Demo (HTML)</span>
-            <span class="o">閰嶇疆琛?(Excel)</span>
-            <span class="o">鎶€鑳?Buff 閰嶇疆</span>
-            <span class="o">鍙鍖栨眹鎶?/span>
-            <span class="o">璺ㄤ細璇濆喅绛栬褰?/span>
+            <span class="o">策划案 (Wiki)</span>
+            <span class="o">交互 Demo (HTML)</span>
+            <span class="o">配置表 (Excel)</span>
+            <span class="o">技能/Buff 配置</span>
+            <span class="o">可视化汇报</span>
+            <span class="o">跨会话决策记录</span>
           </div>
         </div>
 
       </div>
 
       <div class="footer">
-        <span>GNG: Gold and Glory 路 绯荤粺缁?路 浜庢竻婧?/span>
-        <span class="pn">鈥?04 鈥?/span>
+        <span>GNG: Gold and Glory · 系统组 · 于清源</span>
+        <span class="pn">— 04 —</span>
       </div>
     </div>
   </section>
 
-  <!-- ============== 绗?5 椤碉細GnG 鍥㈤槦鍗忎綔鏂扮粨鏋?============== -->
+  <!-- ============== 第 5 页：GnG 团队协作新结构 ============== -->
   <section class="slide">
     <div class="slide-inner">
 
@@ -1318,116 +1543,116 @@
         <span class="sep"></span>
         <span>Team Collaboration</span>
         <span class="sep"></span>
-        <span class="pill highlight">GnG 鍥㈤槦鍗忎綔鏂扮粨鏋?路 鍒嗗伐浣撶郴</span>
+        <span class="pill highlight">GnG 团队协作新结构 · 分工体系</span>
       </div>
 
-      <h1 class="title sm">浠?姣忎汉涓€涓?Agent"<br/>鍒?em>缁熶竴鍏ュ彛 + 鍒嗗眰璐ｄ换</em></h1>
-      <p class="subtitle sm">鏍稿績涓嶆槸"璋佹嫢鏈?Agent",鑰屾槸<b>璋佸鍝眰璐熻矗</b>銆?/p>
+      <h1 class="title sm">从"每人一个 Agent"<br/>到<em>统一入口 + 分层责任</em></h1>
+      <p class="subtitle sm">核心不是"谁拥有 Agent",而是<b>谁对哪层负责</b>。</p>
 
-      <!-- Codex 鏍稿績涓変欢濂?-->
+      <!-- Codex 核心三件套 -->
       <div class="codex-core">
         <div class="core-piece center">
-          <div class="core-label">缁熶竴鍏ュ彛</div>
+          <div class="core-label">统一入口</div>
           <div class="core-name">Codex</div>
-          <div class="core-sub">鎸変换鍔″嵆鏃舵媺璧锋墽琛?/div>
+          <div class="core-sub">按任务即时拉起执行</div>
         </div>
         <div class="core-piece">
-          <div class="core-label">璁捐鐪熺浉婧?/div>
+          <div class="core-label">设计真相源</div>
           <div class="core-name">Wiki</div>
-          <div class="core-sub">椤圭洰鍘熷垯 路 绯荤粺鍏辫瘑 路 鐗堟湰鐩爣</div>
+          <div class="core-sub">项目原则 · 系统共识 · 版本目标</div>
         </div>
         <div class="core-piece">
-          <div class="core-label">杩愯鏃舵敮鎾?/div>
-          <div class="core-name">AGENTS 路 Skills 路 Memory 路 MCP</div>
-          <div class="core-sub">瑙勫垯绾︽潫 路 鏂规硶璁?路 涓婁笅鏂?路 鐪熷疄鍔ㄤ綔</div>
+          <div class="core-label">运行时支撑</div>
+          <div class="core-name">AGENTS · Skills · Memory · MCP</div>
+          <div class="core-sub">规则约束 · 方法论 · 上下文 · 真实动作</div>
         </div>
       </div>
 
-      <!-- L1-L4 鍒嗗眰璐ｄ换 -->
+      <!-- L1-L4 分层责任 -->
       <div class="layers-4">
 
         <div class="layer-row l1">
           <div class="layer-head">
             <span class="lv">L1</span>
-            <span class="lname">椤圭洰灞?/span>
+            <span class="lname">项目层</span>
           </div>
           <div class="layer-body">
-            <div class="who">涓荤瓥 / 鍒朵綔浜?/ 鏍稿績璐熻矗浜?/div>
-            <div class="what">椤圭洰鍘熷垯 路 鐗堟湰鐩爣 路 璺ㄧ郴缁熷垽鏂爣鍑?/div>
+            <div class="who">主策 / 制作人 / 核心负责人</div>
+            <div class="what">项目原则 · 版本目标 · 跨系统判断标准</div>
           </div>
           <div class="layer-spot">
-            <div class="sp-label">Codex 钀界偣</div>
-            <div class="sp-content">Wiki 鏍稿績椤?路 椤圭洰绾ц鍒?/div>
+            <div class="sp-label">Codex 落点</div>
+            <div class="sp-content">Wiki 核心页 · 项目级规则</div>
           </div>
         </div>
 
         <div class="layer-row l2">
           <div class="layer-head">
             <span class="lv">L2</span>
-            <span class="lname">绯荤粺灞?/span>
+            <span class="lname">系统层</span>
           </div>
           <div class="layer-body">
-            <div class="who">鍚勭郴缁熶富绛?/div>
-            <div class="what">绯荤粺璁捐鏍囧噯 路 涓婁笅鏂囪竟鐣?路 璇勫鍙ｅ緞</div>
+            <div class="who">各系统主策</div>
+            <div class="what">系统设计标准 · 上下文边界 · 评审口径</div>
           </div>
           <div class="layer-spot">
-            <div class="sp-label">Codex 钀界偣</div>
-            <div class="sp-content">绯荤粺鏂囨。 路 涓撻」 skill</div>
+            <div class="sp-label">Codex 落点</div>
+            <div class="sp-content">系统文档 · 专项 skill</div>
           </div>
         </div>
 
         <div class="layer-row l3">
           <div class="layer-head">
             <span class="lv">L3</span>
-            <span class="lname">鎵ц灞?/span>
+            <span class="lname">执行层</span>
           </div>
           <div class="layer-body">
-            <div class="who">鍚勭瓥鍒掑悓瀛?/div>
-            <div class="what">鎵挎帴浠诲姟 路 鐢熸垚鑽夌 路 鎺ㄥ姩钀藉湴</div>
+            <div class="who">各策划同学</div>
+            <div class="what">承接任务 · 生成草稿 · 推动落地</div>
           </div>
           <div class="layer-spot">
-            <div class="sp-label">Codex 钀界偣</div>
-            <div class="sp-content">涓汉浠诲姟涓婁笅鏂?路 灞€閮ㄨ崏绋?/div>
+            <div class="sp-label">Codex 落点</div>
+            <div class="sp-content">个人任务上下文 · 局部草稿</div>
           </div>
         </div>
 
         <div class="layer-row l4">
           <div class="layer-head">
             <span class="lv">L4</span>
-            <span class="lname">宸ュ叿灞?/span>
+            <span class="lname">工具层</span>
           </div>
           <div class="layer-body">
-            <div class="who">鏈湴鑳藉姏缁存姢鑰?/div>
-            <div class="what">Wiki / Slides / 鑴氭湰绛夊彲璋冪敤鍏ュ彛</div>
+            <div class="who">本地能力维护者</div>
+            <div class="what">Wiki / Slides / 脚本等可调用入口</div>
           </div>
           <div class="layer-spot">
-            <div class="sp-label">Codex 钀界偣</div>
-            <div class="sp-content">MCP 路 鑴氭湰 路 鏈湴浠ｇ悊</div>
+            <div class="sp-label">Codex 落点</div>
+            <div class="sp-content">MCP · 脚本 · 本地代理</div>
           </div>
         </div>
 
       </div>
 
-      <!-- 搴曢儴鍙ｈ瘈 -->
+      <!-- 底部口诀 -->
       <div class="mnemonic">
-        <span class="m-lead">涓€鍙ヨ瘽璁颁綇</span>
-        <span class="m-item"><b>L1</b> 绠″師鍒?/span>
-        <span class="m-dot">路</span>
-        <span class="m-item"><b>L2</b> 绠＄郴缁熶笂涓嬫枃</span>
-        <span class="m-dot">路</span>
-        <span class="m-item"><b>L3</b> 绠′换鍔℃墽琛?/span>
-        <span class="m-dot">路</span>
-        <span class="m-item"><b>L4</b> 绠″伐鍏疯兘鍔?/span>
+        <span class="m-lead">一句话记住</span>
+        <span class="m-item"><b>L1</b> 管原则</span>
+        <span class="m-dot">·</span>
+        <span class="m-item"><b>L2</b> 管系统上下文</span>
+        <span class="m-dot">·</span>
+        <span class="m-item"><b>L3</b> 管任务执行</span>
+        <span class="m-dot">·</span>
+        <span class="m-item"><b>L4</b> 管工具能力</span>
       </div>
 
       <div class="footer">
-        <span>GNG: Gold and Glory 路 绯荤粺缁?路 浜庢竻婧?&nbsp;|&nbsp; 鍙傝€? GnG Codex 鍒嗗伐鍗忎綔浣撶郴 Wiki</span>
-        <span class="pn">鈥?05 路 FIN 鈥?/span>
+        <span>GNG: Gold and Glory · 系统组 · 于清源 &nbsp;|&nbsp; 参考: GnG Codex 分工协作体系 Wiki</span>
+        <span class="pn">— 05 · FIN —</span>
       </div>
     </div>
   </section>
 
-  <div class="deck-foot">END 路 鍙屽嚮浠讳竴椤靛彲鍏ㄥ睆 路 Demo 鍙湪绗竴椤电洿鎺ユ嫋鎷戒綋楠?/div>
+  <div class="deck-foot">END · 双击任一页可全屏 · Demo 可在第一页直接拖拽体验</div>
 </div>
 
 <script>
